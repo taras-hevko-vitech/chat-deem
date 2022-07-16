@@ -1,6 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Main page: [Demo App](https://taras-hevko-vitech.github.io).
 
 ## Available Scripts
 
