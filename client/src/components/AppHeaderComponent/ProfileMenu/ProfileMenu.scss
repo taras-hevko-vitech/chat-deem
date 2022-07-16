@@ -1,0 +1,16 @@
+.profile-menu {
+  display: flex;
+  align-items: center;
+  margin-left: 32px;
+  cursor: pointer;
+
+  .user-icon {
+    width: 32px;
+    height: 32px;
+    color: white;
+    background: white;
+    border-radius: 14px;
+    margin-left: 15px;
+  }
+
+}

@@ -1,0 +1,15 @@
+.app-header {
+  background-color: #171b20;
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .right-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,47 @@
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  > .App {
+    box-sizing: border-box;
+    width: 100%;
+    color: #fff;
+    font-family: Avenir-Roman, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+
+    .container {
+      max-width: 1444px;
+      padding: 16px 32px;
+      margin: 0 auto;
+    }
+  }
+}
+
+
+@media (max-width: 900px) {
+  #root {
+    .App {
+      font-size: 12px;
+      line-height: 1.37;
+
+      .container {
+        padding: 11px 20px;
+      }
+    }
+  }
+}

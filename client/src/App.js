@@ -1,12 +1,11 @@
-import './App.css';
-import ChatPage from "./pages/ChatPage";
-import { Route, Routes } from "react-router";
-import PhotoUpload from "./PhotoUpload"
+import './App.scss';
+import AppHeaderComponent from "./components/AppHeaderComponent/AppHeaderComponent";
 
 function App() {
 
     return (
         <div className="App">
+            <AppHeaderComponent/>
         </div>
     );
 }
