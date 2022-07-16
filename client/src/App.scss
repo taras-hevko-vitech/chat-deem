@@ -11,6 +11,7 @@ ul {
   left: 0;
   right: 0;
   bottom: 0;
+  background: #181c20;
 
   > .App {
     box-sizing: border-box;
@@ -28,6 +29,11 @@ ul {
       max-width: 1444px;
       padding: 16px 32px;
       margin: 0 auto;
+    }
+    .main {
+      display: flex;
+      min-height: calc(100vh - 64px);
+      height: 100%;
     }
   }
 }
