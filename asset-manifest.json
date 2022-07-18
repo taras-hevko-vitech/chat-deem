@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/chat-deem/static/css/main.9a07a82e.css",
-    "main.js": "/chat-deem/static/js/main.244ae355.js",
+    "main.css": "/chat-deem/static/css/main.6692a989.css",
+    "main.js": "/chat-deem/static/js/main.00b5fb77.js",
     "static/media/user-icon.svg": "/chat-deem/static/media/user-icon.6e067ca12314d54adc3163f5c062545f.svg",
     "index.html": "/chat-deem/index.html",
-    "main.9a07a82e.css.map": "/chat-deem/static/css/main.9a07a82e.css.map",
-    "main.244ae355.js.map": "/chat-deem/static/js/main.244ae355.js.map"
+    "main.6692a989.css.map": "/chat-deem/static/css/main.6692a989.css.map",
+    "main.00b5fb77.js.map": "/chat-deem/static/js/main.00b5fb77.js.map"
   },
   "entrypoints": [
-    "static/css/main.9a07a82e.css",
-    "static/js/main.244ae355.js"
+    "static/css/main.6692a989.css",
+    "static/js/main.00b5fb77.js"
   ]
 }
