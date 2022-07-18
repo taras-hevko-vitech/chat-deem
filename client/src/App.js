@@ -2,6 +2,7 @@ import './App.scss';
 import AppHeaderComponent from "./components/AppHeaderComponent/AppHeaderComponent";
 import Teams from "./components/Teams/Teams";
 import MessageList from "./components/MessageList/MessageList";
+import ProfileInformation from "./components/ProfileInformation/ProfileInformation";
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
             <div className="main">
                 <Teams />
                 <MessageList />
+                <ProfileInformation />
             </div>
         </div>
     );
