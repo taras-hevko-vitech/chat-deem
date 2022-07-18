@@ -27,7 +27,7 @@ function ChannelsList({ props }) {
             </div>
             <div>
                 {channelsList.map((channel, i) => (
-                    <div className="topic">
+                    <div className="topic" key={i}>
                         <div className="topic-title">{channel.title}</div>
                         <div>{channel.messageCount}</div>
                     </div>

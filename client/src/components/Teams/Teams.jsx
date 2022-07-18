@@ -37,7 +37,7 @@ function Teams({ props }) {
             </div>
             <div>
                 {teamsList.map((team, i) => (
-                    <div className="topic">
+                    <div className="topic" key={i}>
                         <div className="topic-title">{team.title}</div>
                         <div>{team.messageCount}</div>
                     </div>
