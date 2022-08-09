@@ -3,6 +3,7 @@ import AppHeaderComponent from "./components/AppHeaderComponent/AppHeaderCompone
 import Teams from "./components/Teams/Teams";
 import MessageList from "./components/MessageList/MessageList";
 import ProfileInformation from "./components/ProfileInformation/ProfileInformation";
+import ChatComponent from "./components/ChatComponent/ChatComponent";
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
                 <Teams />
                 <MessageList />
                 <ProfileInformation />
+                <ChatComponent />
             </div>
         </div>
     );

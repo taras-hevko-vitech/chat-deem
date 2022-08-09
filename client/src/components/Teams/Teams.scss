@@ -1,6 +1,6 @@
 .teams {
-  width: 240px;
-
+  max-width: 240px;
+  width: 100%;
   .teams-header,
   .channels-header {
     display: flex;
