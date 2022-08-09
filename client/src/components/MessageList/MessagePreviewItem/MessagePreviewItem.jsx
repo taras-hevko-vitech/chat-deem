@@ -1,7 +1,8 @@
 import React from 'react';
 import "./MessagePreviewItem.scss"
-import mockIcon from "../../../assets/images/icon-add.png"
 import classNames from "classnames";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faEllipsis} from "@fortawesome/free-solid-svg-icons"
 
 function MessagePreviewItem({ previewData }) {
 
@@ -24,7 +25,7 @@ function MessagePreviewItem({ previewData }) {
                 <div className="preview-message">{lastMessageText}</div>
             </div>
             <div className="right">
-                <img src={mockIcon} alt="" className="menu-icon"/>
+                <FontAwesomeIcon icon={faEllipsis} />
                 <div className="message-data">{lastMessageData}</div>
             </div>
         </div>

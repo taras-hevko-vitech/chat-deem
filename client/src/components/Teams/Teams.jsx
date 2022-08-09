@@ -1,7 +1,9 @@
 import React from 'react';
 import "./Teams.scss"
-import plusIcon from "../../assets/images/icon-add.png"
 import ChannelsList from "./ChannelsList";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faUserPlus} from "@fortawesome/free-solid-svg-icons"
+
 
 function Teams({ props }) {
     const teamsList = [
@@ -32,7 +34,9 @@ function Teams({ props }) {
             <div className="container">
                 <div className="teams-header">
                     <div className="title">Teams</div>
-                    <img src={plusIcon} alt="plus" className="plus-icon"/>
+                    <div className="plus-icon">
+                        <FontAwesomeIcon icon={faUserPlus} />
+                    </div>
                 </div>
             </div>
             <div>
