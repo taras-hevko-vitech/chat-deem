@@ -1,6 +1,8 @@
 import React from 'react';
 import "./MessageList.scss"
 import MessagePreviewItem from "./MessagePreviewItem/MessagePreviewItem";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSearch} from "@fortawesome/free-solid-svg-icons"
 
 function MessageList({ props }) {
     const chatsData = [
@@ -51,8 +53,13 @@ function MessageList({ props }) {
     return (
         <div className="message-list">
             <div className="list-header">
-                <div className="list-title">
-                    List of designers
+                <div className="title-wrap">
+                    <div className="list-title">
+                        List of designers
+                    </div>
+                    <div className="search-icon">
+                        <FontAwesomeIcon icon={faSearch} />
+                    </div>
                 </div>
                 <div className="message-tabs">
                     <div className="tab-item tab-item-active">All messages</div>
