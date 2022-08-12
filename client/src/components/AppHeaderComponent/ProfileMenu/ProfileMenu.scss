@@ -1,4 +1,5 @@
 .profile-menu {
+  position: relative;
   display: flex;
   align-items: center;
   margin-left: 32px;
@@ -12,5 +13,15 @@
     border-radius: 14px;
     margin-left: 15px;
   }
-
+  .menu-items {
+    position: absolute;
+    top: 120%;
+    width: 100%;
+    background-color: #181c20;
+    border-radius: 8px;
+     > .item {
+       padding: 5px 10px;
+      color: #fff;
+    }
+  }
 }

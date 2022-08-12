@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./ChatComponent.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faPaperclip} from "@fortawesome/free-solid-svg-icons"
+import {faPaperclip, faExclamationTriangle} from "@fortawesome/free-solid-svg-icons"
 import MessageComponent from "./MessageComponent/MessageComponent";
 
 function ChatComponent({ props }) {
@@ -51,6 +51,8 @@ function ChatComponent({ props }) {
         },
 
     ]
+
+    const [showUploadMenu, setShowUploadMenu] = useState(true)
     const onSend = (e) => {
         e.preventDefault()
     };
@@ -68,9 +70,22 @@ function ChatComponent({ props }) {
                 ))}
             </div>
             <form className="chat-footer" onSubmit={onSend}>
-                <FontAwesomeIcon icon={faPaperclip} className="upload-clip"/>
+                <FontAwesomeIcon icon={faPaperclip} className="upload-clip" onClick={() => setShowUploadMenu(!showUploadMenu)}/>
                 <input type="text" className="typing-area" placeholder="Type your message…"/>
                 <button type="submit">SEND</button>
+                {showUploadMenu && (
+                    <div className="upload-menu">
+                        <div className="upload-item">
+                            Photo
+                        </div>
+                        <div className="upload-item">
+                            Video
+                        </div>
+                        <div className="upload-item">
+                            Files
+                        </div>
+                    </div>
+                )}
             </form>
         </div>
     );
