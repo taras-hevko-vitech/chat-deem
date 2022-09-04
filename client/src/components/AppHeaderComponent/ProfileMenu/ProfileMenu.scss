@@ -1,9 +1,15 @@
+@import "../../../assets/_breakpoints.scss";
+
+
 .profile-menu {
   position: relative;
   display: flex;
   align-items: center;
   margin-left: 32px;
   cursor: pointer;
+  @include s {
+    margin-left: 12px;
+  }
 
   .user-icon {
     width: 32px;
@@ -12,6 +18,10 @@
     background: white;
     border-radius: 14px;
     margin-left: 15px;
+    @include s {
+      width: 24px;
+      height: 24px;
+    }
   }
   .menu-items {
     position: absolute;
@@ -19,9 +29,10 @@
     width: 100%;
     background-color: #181c20;
     border-radius: 8px;
+    z-index: 80;
      > .item {
        padding: 5px 10px;
-      color: #fff;
+       color: #fff;
     }
   }
 }

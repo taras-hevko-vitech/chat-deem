@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./ChatComponent.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faPaperclip, faExclamationTriangle} from "@fortawesome/free-solid-svg-icons"
 import MessageComponent from "./MessageComponent/MessageComponent";
+import ProfileInformation from "../ProfileInformation/ProfileInformation";
 
-function ChatComponent({ props }) {
+function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
 
     const mockMessages = [
         {
@@ -52,15 +53,18 @@ function ChatComponent({ props }) {
 
     ]
 
-    const [showUploadMenu, setShowUploadMenu] = useState(true)
+    const [showUploadMenu, setShowUploadMenu] = useState(false)
     const onSend = (e) => {
         e.preventDefault()
     };
+
     return (
         <div className="chat-component">
+            {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile}/>}
             <div className="chat-messages">
-                {mockMessages.map((mess) => (
+                {mockMessages.map((mess, i) => (
                     <MessageComponent
+                        key={i}
                         isMy={1 === mess.userId}
                         type={mess.type}
                         message={mess.message}

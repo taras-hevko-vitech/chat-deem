@@ -3,8 +3,10 @@ import "./MessagePreviewItem.scss"
 import classNames from "classnames";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faEllipsis} from "@fortawesome/free-solid-svg-icons"
+import { useNavigate } from "react-router";
 
 function MessagePreviewItem({ previewData }) {
+    const navigate = useNavigate();
 
     const { username, photoURL, onlineStatus, lastMessageText, lastMessageData } = previewData;
 
@@ -15,7 +17,7 @@ function MessagePreviewItem({ previewData }) {
     })
 
     return (
-        <div className="chat-preview">
+        <div className="chat-preview" onClick={() => navigate("/chat")}>
             <div className="left">
                 <img src={photoURL} alt="" className="avatar" />
                 <div className={statusClassname} />
