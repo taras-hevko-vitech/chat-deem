@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import "./ChatComponent.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faPaperclip, faExclamationTriangle} from "@fortawesome/free-solid-svg-icons"
+import {faPaperclip} from "@fortawesome/free-solid-svg-icons"
 import MessageComponent from "./MessageComponent/MessageComponent";
 import ProfileInformation from "../ProfileInformation/ProfileInformation";
 
