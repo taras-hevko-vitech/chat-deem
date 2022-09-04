@@ -1,21 +1,11 @@
 import './App.scss';
-import AppHeaderComponent from "./components/AppHeaderComponent/AppHeaderComponent";
-import Teams from "./components/Teams/Teams";
-import MessageList from "./components/MessageList/MessageList";
-import ProfileInformation from "./components/ProfileInformation/ProfileInformation";
-import ChatComponent from "./components/ChatComponent/ChatComponent";
+import Layout from "./Layout";
 
 function App() {
 
     return (
         <div className="App">
-            <AppHeaderComponent/>
-            <div className="main">
-                <Teams />
-                <MessageList />
-                <ProfileInformation />
-                <ChatComponent />
-            </div>
+            <Layout />
         </div>
     );
 }

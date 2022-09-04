@@ -1,7 +1,14 @@
+@import "../../../assets/_breakpoints.scss";
+
+
 .message-container {
   display: flex;
   flex-direction: column;
   padding: 20px 30px;
+  @include s {
+    padding: 10px 15px;
+
+  }
   .message {
     display: flex;
     align-items: center;
@@ -17,6 +24,9 @@
       padding: 16px 23px;
       border-radius: 6px;
       margin-bottom: 6px;
+      @include md {
+        padding: 8px 11px;
+      }
     }
     .your-message {
       color: #ffffff;
@@ -31,6 +41,10 @@
       width: 40px;
       border-radius: 50%;
       object-fit: cover;
+      @include s {
+        height: 30px;
+        width: 30px;
+      }
     }
   }
   .date {

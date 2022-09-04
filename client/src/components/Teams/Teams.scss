@@ -1,6 +1,23 @@
+@import "../../assets/_breakpoints.scss";
+
 .teams {
   max-width: 240px;
   width: 100%;
+  height: 100%;
+  background: #181c20;
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  @include md {
+    position: absolute;
+    top: 56px;
+    bottom: 0;
+    transform: translateX(-100%);
+    z-index: 23;
+  };
+  @include s {
+    top: 46px;
+  }
   .teams-header,
   .channels-header {
     display: flex;
@@ -62,4 +79,8 @@
       transition: .1s ease-in-out;
     }
   }
+}
+
+.teams-open {
+  transform: translateX(0);
 }

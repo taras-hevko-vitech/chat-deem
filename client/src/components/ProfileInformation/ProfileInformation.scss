@@ -1,3 +1,5 @@
+@import "../../assets/_breakpoints.scss";
+
 .profile-information {
   width: 220px;
   background: #191c21;
@@ -36,6 +38,8 @@
     }
   }
   .additional-information {
+    overflow-y: auto;
+    max-height: calc(100vh - 176px - 66px);
     padding: 1px 24px;
     .block-info {
       padding: 22px 0;
@@ -63,5 +67,67 @@
         color: #25c14a !important;
       }
     }
+  }
+}
+
+.profile-information-mobile {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  color: black;
+  padding: 5px 10px;
+  background: #D3D3D3;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .left {
+    display: flex;
+    align-items: center;
+    .avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .online-status {
+      color: #696969;
+    }
+    .fa-chevron-left {
+      margin-right: 10px;
+    }
+  }
+  .fa-chevron-left,
+  .fa-chevron-down,
+  .fa-chevron-up {
+    font-size: 15px;
+  }
+}
+
+.user-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 45px;
+  color: black;
+  padding: 5px;
+  background: #D3D3D3;
+  .title {
+    font-size: 16px;
+    text-align: center;
+  }
+  div {
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    margin-top: 5px;
+  }
+  .profile-link {
+    margin-top: 5px;
+    color: #25c14a !important;
+    text-align: center;
   }
 }

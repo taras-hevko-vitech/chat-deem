@@ -3,9 +3,10 @@ import "./Teams.scss"
 import ChannelsList from "./ChannelsList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons"
+import classNames from "classnames";
 
 
-function Teams({ props }) {
+function Teams({ showChannelList, setShowChannelList }) {
     const teamsList = [
         {
             title: "#designers",
@@ -29,8 +30,13 @@ function Teams({ props }) {
         },
     ]
 
+    const className = classNames({
+        "teams": true,
+        "teams-open": showChannelList
+    })
+
     return (
-        <div className="teams">
+        <div className={className} onClick={() => setShowChannelList(false)}>
             <div className="container">
                 <div className="teams-header">
                     <div className="title">Teams</div>
