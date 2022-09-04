@@ -1,8 +1,14 @@
+@import "../../assets/_breakpoints.scss";
+
+
 .chat-component {
   position: relative;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 110px);
+  @include s {
+    height: calc(100vh - 100px);
+  }
   border: none;
   padding-top: 55px;
   background-color: #f3f4f7;
