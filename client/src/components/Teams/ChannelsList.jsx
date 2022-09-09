@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import plusIcon from "../../assets/images/icon-add.png";
 
 function ChannelsList({ props }) {
@@ -15,7 +15,7 @@ function ChannelsList({ props }) {
             title: "#our clients",
             messageCount: 9
         }
-    ]
+    ];
 
     return (
         <div className="channels">

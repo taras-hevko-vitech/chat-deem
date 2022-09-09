@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import "./ProfileMenu.scss"
-import userIcon from "../../../assets/images/user-icon.svg"
+import React, { useState } from "react";
+import "./ProfileMenu.scss";
+import userIcon from "../../../assets/images/user-icon.svg";
 
 function ProfileMenu({ props }) {
     const [showMenu, setShowMenu] = useState(false);
@@ -8,7 +8,7 @@ function ProfileMenu({ props }) {
     return (
         <div className="profile-menu" onClick={() => setShowMenu(!showMenu)}>
             Rachel Curtis
-            <img src={userIcon} alt="user" className="user-icon"/>
+            <img src={userIcon} alt="user" className="user-icon" />
             {showMenu && (
                 <div className="menu-items">
                     <div className="item">Edit my Profile</div>

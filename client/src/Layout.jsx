@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import AppHeaderComponent from "./components/AppHeaderComponent/AppHeaderComponent";
 import Teams from "./components/Teams/Teams";
 import MessageList from "./components/MessageList/MessageList";
@@ -15,32 +15,32 @@ function Layout() {
             setWindowSize(AppService.getWindowSize());
         }
 
-        window.addEventListener('resize', handleWindowResize);
+        window.addEventListener("resize", handleWindowResize);
 
         return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        }
-    })
-    const isSmallMobile = windowSize.innerWidth < 686
-    const isMobile = windowSize.innerWidth < 960
-    const isTablet = windowSize.innerWidth < 1100
+            window.removeEventListener("resize", handleWindowResize);
+        };
+    });
+    const isSmallMobile = windowSize.innerWidth < 686;
+    const isMobile = windowSize.innerWidth < 960;
+    const isTablet = windowSize.innerWidth < 1100;
     if (isSmallMobile) {
         return (
             <div className="App">
-                <AppHeaderComponent/>
+                <AppHeaderComponent />
                 <Routes>
                     <Route path="/" element={<MessageList isMobile={isMobile} isTablet={isTablet} />} />
-                    <Route path="/chat" element={<ChatComponent isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile}/>} />
+                    <Route path="/chat" element={<ChatComponent isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />} />
                     <Route path="*" element={<MessageList isMobile={isMobile} isTablet={isTablet} />} />
                 </Routes>
             </div>
-        )
+        );
     }
     return (
         <div className="App">
             {isTablet ? (
                 <>
-                    <AppHeaderComponent/>
+                    <AppHeaderComponent />
                     <div className="main">
                         <Teams isMobile={isMobile} isTablet={isTablet} />
                         <MessageList isMobile={isMobile} isTablet={isTablet} />
@@ -49,7 +49,7 @@ function Layout() {
                 </>
             ) : (
                 <>
-                    <AppHeaderComponent/>
+                    <AppHeaderComponent />
                     <div className="main">
                         <Teams />
                         <MessageList />

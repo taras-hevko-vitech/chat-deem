@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
-import "./ProfileInformation.scss"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import { faChevronDown, faChevronLeft, faChevronUp } from "@fortawesome/free-solid-svg-icons"
+import React, { useState } from "react";
+import "./ProfileInformation.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronLeft, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
 function ProfileInformation({ isMobile, isTablet, isSmallMobile }) {
-    const [showProfileMenu, setShowProfileMenu] = useState(false)
-    const navigate = useNavigate()
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const navigate = useNavigate();
     if (isTablet) {
         return (
             <>
                 <div className="profile-information-mobile">
                     <div className="left">
-                        {isSmallMobile && <FontAwesomeIcon icon={faChevronLeft} onClick={() => navigate("/")}/>}
-                        <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar"/>
+                        {isSmallMobile && <FontAwesomeIcon icon={faChevronLeft} onClick={() => navigate("/")} />}
+                        <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />
                         <div>
                             <div className="user-name">Rachel Curtis</div>
                             <div className="online-status">online</div>
                         </div>
                     </div>
-                    <FontAwesomeIcon icon={showProfileMenu ? faChevronUp : faChevronDown } onClick={() => {setShowProfileMenu(!showProfileMenu)}}/>
+                    <FontAwesomeIcon
+                        icon={showProfileMenu ? faChevronUp : faChevronDown}
+                        onClick={() => {
+                            setShowProfileMenu(!showProfileMenu);
+                        }}
+                    />
                 </div>
                 {showProfileMenu && (
                     <div className="user-info">
@@ -36,12 +41,12 @@ function ProfileInformation({ isMobile, isTablet, isSmallMobile }) {
                     </div>
                 )}
             </>
-        )
+        );
     } else {
         return (
             <div className="profile-information">
                 <div className="main-info">
-                    <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar"/>
+                    <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />
                     <div className="user-name">Rachel Curtis</div>
                     <div className="user-address">New York, USA</div>
                 </div>

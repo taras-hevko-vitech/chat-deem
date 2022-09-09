@@ -1,105 +1,103 @@
 @import "../../assets/_breakpoints.scss";
 
-
 .message-list {
-  background: #111519;
-  width: 340px;
-  @include s {
-    width: 100%;
-  };
-  .list-header {
-    padding: 18px 24px 0 24px;
-    box-shadow: inset 0 -1px 0 0 #3e444e;
+    background: #111519;
+    width: 340px;
     @include s {
-      padding: 8px 12px 0 12px;
-
+        width: 100%;
     }
-      .channel-list-btn {
-      margin-bottom: 5px;
-      .fa-chevron-left {
-        margin-right: 10px;
-      }
+    .list-header {
+        padding: 18px 24px 0 24px;
+        box-shadow: inset 0 -1px 0 0 #3e444e;
+        @include s {
+            padding: 8px 12px 0 12px;
+        }
+        .channel-list-btn {
+            margin-bottom: 5px;
+            .fa-chevron-left {
+                margin-right: 10px;
+            }
+        }
+        .title-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 23px;
+            .list-title {
+                font-size: 16px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.25;
+                letter-spacing: normal;
+                color: #fff;
+            }
+            .search-wrapper {
+                position: relative;
+                background-color: #40454b;
+                border-radius: 50%;
+                display: flex;
+                &.active {
+                    border-radius: 0;
+                    width: 100%;
+                }
+                &.active .search-input {
+                    display: block;
+                    width: 100%;
+                    background-color: #40454b;
+                    color: #fff;
+                    border-radius: 10%;
+                }
+                .search-input {
+                    display: none;
+                    width: 0;
+                    padding: 5px;
+                    border: none;
+                    outline: none;
+                }
+                .search-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 15px;
+                    height: 15px;
+                    padding: 5px;
+                    border: solid 1px #212931;
+                    cursor: pointer;
+                    border-radius: 50%;
+                    svg {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+        .message-tabs {
+            display: flex;
+            justify-content: space-between;
+            .tab-item {
+                font-family: Avenir-Roman, sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                color: #5f6773;
+                padding-bottom: 16px;
+                cursor: pointer;
+                &-active {
+                    color: #fff;
+                    box-shadow: inset 0 -1px 0 0 #c92020;
+                }
+            }
+        }
     }
-    .title-wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 23px;
-      .list-title {
-        font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.25;
-        letter-spacing: normal;
-        color: #fff;
-      }
-      .search-wrapper {
-        position: relative;
-        background-color: #40454b;
-        border-radius: 50%;
-        display: flex;
-        &.active {
-          border-radius: 0;
-          width: 100%;
+    .chat-list {
+        max-height: calc(100vh - 170px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        @include s {
+            max-height: calc(100vh - 187px);
         }
-        &.active .search-input {
-          display: block;
-          width: 100%;
-          background-color: #40454b;
-          color: #fff;
-          border-radius: 10%;
-        }
-        .search-input {
-          display: none;
-          width: 0;
-          padding: 5px;
-          border: none;
-          outline: none;
-        }
-        .search-icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 15px;
-          height: 15px;
-          padding: 5px;
-          border: solid 1px #212931;
-          cursor: pointer;
-          border-radius: 50%;
-          svg {
-            font-size: 12px;
-          }
-        }
-      }
     }
-    .message-tabs {
-      display: flex;
-      justify-content: space-between;
-      .tab-item {
-        font-family: Avenir-Roman, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.43;
-        letter-spacing: normal;
-        color: #5f6773;
-        padding-bottom: 16px;
-        cursor: pointer;
-        &-active {
-          color: #fff;
-          box-shadow: inset 0 -1px 0 0 #c92020;
-        }
-      }
-    }
-  }
-  .chat-list {
-    max-height: calc(100vh - 170px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    @include s {
-      max-height: calc(100vh - 187px);
-    }
-  }
 }

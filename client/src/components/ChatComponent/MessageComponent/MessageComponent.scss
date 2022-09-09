@@ -1,62 +1,60 @@
 @import "../../../assets/_breakpoints.scss";
 
-
 .message-container {
-  display: flex;
-  flex-direction: column;
-  padding: 20px 30px;
-  @include s {
-    padding: 10px 15px;
-
-  }
-  .message {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    .message-content {
-      font-family: Avenir-Roman, sans-serif;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.43;
-      letter-spacing: normal;
-      padding: 16px 23px;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      @include md {
-        padding: 8px 11px;
-      }
+    flex-direction: column;
+    padding: 20px 30px;
+    @include s {
+        padding: 10px 15px;
     }
-    .your-message {
-      color: #ffffff;
-      background-color: #1b76ed;
+    .message {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .message-content {
+            font-family: Avenir-Roman, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            padding: 16px 23px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            @include md {
+                padding: 8px 11px;
+            }
+        }
+        .your-message {
+            color: #ffffff;
+            background-color: #1b76ed;
+        }
+        .not-your-message {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .avatar {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            @include s {
+                height: 30px;
+                width: 30px;
+            }
+        }
     }
-    .not-your-message {
-      background-color: #ffffff;
-      color: #000000;
+    .date {
+        display: inline-block;
+        font-family: Avenir-Roman, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.25;
+        letter-spacing: normal;
+        color: #939393;
+        padding: 0 56px;
     }
-    .avatar {
-      height: 40px;
-      width: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      @include s {
-        height: 30px;
-        width: 30px;
-      }
-    }
-  }
-  .date {
-    display: inline-block;
-    font-family: Avenir-Roman, sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.25;
-    letter-spacing: normal;
-    color: #939393;
-    padding: 0 56px;
-  }
 }

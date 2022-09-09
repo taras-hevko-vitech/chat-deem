@@ -1,8 +1,7 @@
-import React from 'react';
-import "./Notification.scss"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faStar, faBell, faQuestion} from "@fortawesome/free-solid-svg-icons"
-
+import React from "react";
+import "./Notification.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar, faBell, faQuestion } from "@fortawesome/free-solid-svg-icons";
 
 function Notification({ props }) {
     return (
