@@ -1,54 +1,56 @@
 @import "./assets/_breakpoints.scss";
 
 body {
-    background: #181c20;
+  background: #181c20;
 }
+
 ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 #root {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+
+  > .App {
+    box-sizing: border-box;
     width: 100%;
-
-    > .App {
-        box-sizing: border-box;
-        width: 100%;
-        color: #fff;
-        font-family: Avenir-Roman, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.43;
-        letter-spacing: normal;
-        @include s {
-            font-size: 12px;
-        }
-        @include md {
-            font-size: 12px;
-            line-height: 1.37;
-        }
-
-        .container {
-            padding: 16px 32px;
-            @include md {
-                padding: 11px 20px;
-            }
-            @include s {
-                padding: 8px 10px;
-            }
-        }
-        .main {
-            display: flex;
-            height: calc(100vh - 64px);
-        }
+    color: #fff;
+    font-family: Avenir-Roman, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    @include s {
+      font-size: 12px;
     }
+    @include md {
+      font-size: 12px;
+      line-height: 1.37;
+    }
+
+    .container {
+      padding: 16px 32px;
+      @include md {
+        padding: 11px 20px;
+      }
+      @include s {
+        padding: 8px 10px;
+      }
+    }
+
+    .main {
+      display: flex;
+      height: calc(100vh - 64px);
+    }
+  }
 }

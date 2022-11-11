@@ -1,98 +1,106 @@
 @import "../../../assets/_breakpoints.scss";
 
 .chat-preview {
-    display: flex;
-    align-items: flex-end;
-    padding: 17px 24px 0 24px;
-    cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  padding: 17px 24px 0 24px;
+  cursor: pointer;
+  @include s {
+    box-shadow: inset 0 -1px 0 0 rgba(90, 95, 101, 0.5);
+    justify-content: space-around;
+  }
+
+  .left {
+    position: relative;
+    margin-right: 16px;
+    align-self: flex-start;
+
+    .online-status {
+      position: absolute;
+      top: 3%;
+      left: 3%;
+      width: 5px;
+      height: 5px;
+      border: solid 2px #282e36;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .active-status {
+      background: #25c14a;
+    }
+
+    .dont-disturb {
+      background: #ff4646;
+    }
+
+    .avatar {
+      height: 40px;
+      width: 40px;
+      box-shadow: none;
+      border-radius: 50%;
+    }
+  }
+
+  .center {
     @include s {
-        box-shadow: inset 0 -1px 0 0 rgba(90, 95, 101, 0.5);
-        justify-content: space-around;
+      justify-self: flex-start;
     }
-    .left {
-        position: relative;
-        margin-right: 16px;
+
+    .username {
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.43;
+      letter-spacing: normal;
+      color: #fff;
+    }
+
+    .preview-message {
+      font-family: Avenir, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.5;
+      letter-spacing: normal;
+      color: #5f6773;
+
+      text-overflow: ellipsis; // обрізання довгих блоків з текстом
+      overflow: hidden; // приховати текст, що виходить за межі блоку
+      max-width: 180px; // ширина блоку з текстом
+      white-space: nowrap;
+      @include s {
         align-self: flex-start;
-        .online-status {
-            position: absolute;
-            top: 3%;
-            left: 3%;
-            width: 5px;
-            height: 5px;
-            border: solid 2px #282e36;
-            border-radius: 50%;
-            background: #fff;
-        }
-
-        .active-status {
-            background: #25c14a;
-        }
-
-        .dont-disturb {
-            background: #ff4646;
-        }
-
-        .avatar {
-            height: 40px;
-            width: 40px;
-            box-shadow: none;
-            border-radius: 50%;
-        }
+      }
     }
-    .center {
-        @include s {
-            justify-self: flex-start;
-        }
-        .username {
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.43;
-            letter-spacing: normal;
-            color: #fff;
-        }
-        .preview-message {
-            font-family: Avenir, sans-serif;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.5;
-            letter-spacing: normal;
-            color: #5f6773;
+  }
 
-            text-overflow: ellipsis; // обрізання довгих блоків з текстом
-            overflow: hidden; // приховати текст, що виходить за межі блоку
-            max-width: 180px; // ширина блоку з текстом
-            white-space: nowrap;
-            @include s {
-                align-self: flex-start;
-            }
-        }
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-left: 12px;
+
+    .message-data {
+      font-family: Avenir, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.5;
+      letter-spacing: normal;
+      color: #5f6773;
     }
-    .right {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        padding-left: 12px;
-        .message-data {
-            font-family: Avenir, sans-serif;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.5;
-            letter-spacing: normal;
-            color: #5f6773;
-        }
+  }
+
+  .right,
+  .center {
+    box-shadow: inset 0 -1px 0 0 rgba(90, 95, 101, 0.5);
+    @include s {
+      box-shadow: none;
     }
-    .right,
-    .center {
-        box-shadow: inset 0 -1px 0 0 rgba(90, 95, 101, 0.5);
-        @include s {
-            box-shadow: none;
-        }
-        padding-bottom: 16px;
-    }
+    padding-bottom: 16px;
+  }
 }

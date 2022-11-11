@@ -4,6 +4,7 @@
     "private": true,
     "homepage": "https://taras-hevko-vitech.github.io/chat-deem",
     "dependencies": {
+        "@apollo/client": "^3.7.1",
         "@fortawesome/fontawesome-svg-core": "^6.1.2",
         "@fortawesome/free-regular-svg-icons": "^6.1.2",
         "@fortawesome/free-solid-svg-icons": "^6.1.2",
@@ -14,6 +15,7 @@
         "react": "^18.1.0",
         "react-dom": "^18.1.0",
         "react-scripts": "5.0.1",
+        "recoil": "^0.7.6",
         "web-vitals": "^2.1.4"
     },
     "scripts": {

@@ -73,7 +73,8 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
                 ))}
             </div>
             <form className="chat-footer" onSubmit={onSend}>
-                <FontAwesomeIcon icon={faPaperclip} className="upload-clip" onClick={() => setShowUploadMenu(!showUploadMenu)} />
+                <FontAwesomeIcon icon={faPaperclip} className="upload-clip"
+                                 onClick={() => setShowUploadMenu(!showUploadMenu)} />
                 <input type="text" className="typing-area" placeholder="Type your message…" />
                 <button type="submit">SEND</button>
                 {showUploadMenu && (

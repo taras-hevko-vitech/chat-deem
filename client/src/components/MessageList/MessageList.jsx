@@ -94,7 +94,8 @@ function MessageList({ isMobile }) {
     });
     return (
         <div className="message-list">
-            {showChannelList && isMobile && <Teams showChannelList={showChannelList} setShowChannelList={setShowChannelList} />}
+            {showChannelList && isMobile &&
+                <Teams showChannelList={showChannelList} setShowChannelList={setShowChannelList} />}
             <div className="list-header">
                 {isMobile && (
                     <div className="channel-list-btn" onClick={() => setShowChannelList(!showChannelList)}>
