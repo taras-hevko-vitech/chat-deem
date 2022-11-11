@@ -2,8 +2,8 @@
 
 body {
   background: #181c20;
-
 }
+
 ul {
   margin: 0;
   padding: 0;
@@ -45,9 +45,9 @@ ul {
       }
       @include s {
         padding: 8px 10px;
-
       }
     }
+
     .main {
       display: flex;
       height: calc(100vh - 64px);

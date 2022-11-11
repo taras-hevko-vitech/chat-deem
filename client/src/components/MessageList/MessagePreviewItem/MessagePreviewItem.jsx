@@ -1,8 +1,8 @@
-import React from 'react';
-import "./MessagePreviewItem.scss"
+import React from "react";
+import "./MessagePreviewItem.scss";
 import classNames from "classnames";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faEllipsis} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
 function MessagePreviewItem({ previewData }) {
@@ -13,8 +13,8 @@ function MessagePreviewItem({ previewData }) {
     const statusClassname = classNames({
         "online-status": true,
         "active-status": onlineStatus === "ACTIVE",
-        "dont-disturb": onlineStatus === "DONT_DISTURB",
-    })
+        "dont-disturb": onlineStatus === "DONT_DISTURB"
+    });
 
     return (
         <div className="chat-preview" onClick={() => navigate("/chat")}>

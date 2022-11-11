@@ -14,10 +14,11 @@
     bottom: 0;
     transform: translateX(-100%);
     z-index: 23;
-  };
+  }
   @include s {
     top: 46px;
   }
+
   .teams-header,
   .channels-header {
     display: flex;
@@ -45,8 +46,9 @@
       height: 10px;
       width: 10px;
       cursor: pointer;
+
       .fa-user-plus {
-        font-size: 8px ;
+        font-size: 8px;
       }
     }
   }
@@ -57,7 +59,7 @@
     align-items: center;
     padding: 6px 32px;
     cursor: pointer;
-    transition: .1s ease-in-out;
+    transition: 0.1s ease-in-out;
 
     &:hover .topic-title {
       color: #fff;
@@ -76,7 +78,7 @@
       line-height: 1.29;
       letter-spacing: normal;
       color: #5f6773;
-      transition: .1s ease-in-out;
+      transition: 0.1s ease-in-out;
     }
   }
 }

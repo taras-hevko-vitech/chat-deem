@@ -1,10 +1,9 @@
-import React from 'react';
-import "./Teams.scss"
+import React from "react";
+import "./Teams.scss";
 import ChannelsList from "./ChannelsList";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faUserPlus} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
-
 
 function Teams({ showChannelList, setShowChannelList }) {
     const teamsList = [
@@ -27,13 +26,13 @@ function Teams({ showChannelList, setShowChannelList }) {
         {
             title: "#managers",
             messageCount: 2
-        },
-    ]
+        }
+    ];
 
     const className = classNames({
-        "teams": true,
+        teams: true,
         "teams-open": showChannelList
-    })
+    });
 
     return (
         <div className={className} onClick={() => setShowChannelList(false)}>

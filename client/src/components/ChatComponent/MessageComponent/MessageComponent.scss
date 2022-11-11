@@ -1,18 +1,18 @@
 @import "../../../assets/_breakpoints.scss";
 
-
 .message-container {
   display: flex;
   flex-direction: column;
   padding: 20px 30px;
   @include s {
     padding: 10px 15px;
-
   }
+
   .message {
     display: flex;
     align-items: center;
     gap: 10px;
+
     .message-content {
       font-family: Avenir-Roman, sans-serif;
       font-size: 14px;
@@ -28,14 +28,17 @@
         padding: 8px 11px;
       }
     }
+
     .your-message {
       color: #ffffff;
       background-color: #1b76ed;
     }
+
     .not-your-message {
       background-color: #ffffff;
       color: #000000;
     }
+
     .avatar {
       height: 40px;
       width: 40px;
@@ -47,6 +50,7 @@
       }
     }
   }
+
   .date {
     display: inline-block;
     font-family: Avenir-Roman, sans-serif;

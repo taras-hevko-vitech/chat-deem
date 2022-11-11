@@ -1,6 +1,5 @@
 @import "../../assets/_breakpoints.scss";
 
-
 .chat-component {
   position: relative;
   display: flex;
@@ -12,11 +11,13 @@
   border: none;
   padding-top: 55px;
   background-color: #f3f4f7;
+
   .chat-messages {
     flex-grow: 3;
     overflow-y: auto;
     background-color: #f3f4f7;
   }
+
   .chat-footer {
     position: relative;
     align-items: center;
@@ -26,6 +27,7 @@
     height: 32px;
     justify-content: space-between;
     padding: 15px 30px;
+
     .upload-clip {
       position: relative;
       color: black;
@@ -33,6 +35,7 @@
       cursor: pointer;
       margin-right: 24px;
     }
+
     .upload-menu {
       display: flex;
       flex-direction: column;
@@ -46,15 +49,17 @@
       width: 100%;
       max-width: 60px;
       border-radius: 12px;
+
       .upload-item {
         color: #1f2326;
         padding: 2px 0;
         cursor: pointer;
       }
     }
+
     .typing-area {
       border: none;
-      font-family: Avenir,sans-serif;
+      font-family: Avenir, sans-serif;
       font-size: 14px;
       font-stretch: normal;
       font-style: normal;
@@ -66,9 +71,10 @@
       height: 100%;
       margin-right: 20px;
     }
+
     button {
       border: none;
-      font-family: Avenir,sans-serif;
+      font-family: Avenir, sans-serif;
       font-size: 14px;
       font-stretch: normal;
       font-style: normal;

@@ -8,11 +8,13 @@
   @include s {
     box-shadow: inset 0 -1px 0 0 rgba(90, 95, 101, 0.5);
     justify-content: space-around;
-  };
+  }
+
   .left {
     position: relative;
     margin-right: 16px;
     align-self: flex-start;
+
     .online-status {
       position: absolute;
       top: 3%;
@@ -39,10 +41,12 @@
       border-radius: 50%;
     }
   }
+
   .center {
     @include s {
       justify-self: flex-start;
     }
+
     .username {
       font-size: 14px;
       font-weight: normal;
@@ -52,6 +56,7 @@
       letter-spacing: normal;
       color: #fff;
     }
+
     .preview-message {
       font-family: Avenir, sans-serif;
       font-size: 12px;
@@ -71,11 +76,13 @@
       }
     }
   }
+
   .right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     padding-left: 12px;
+
     .message-data {
       font-family: Avenir, sans-serif;
       font-size: 12px;
@@ -87,6 +94,7 @@
       color: #5f6773;
     }
   }
+
   .right,
   .center {
     box-shadow: inset 0 -1px 0 0 rgba(90, 95, 101, 0.5);
