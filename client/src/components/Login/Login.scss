@@ -1,3 +1,62 @@
-.login {
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 
+.login {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  color: white;
+
+  > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .btn-auth {
+      font-family: Avenir-Roman, sans-serif;
+      background: #25c14a;
+
+      color: #1d1d1d;
+      cursor: pointer;
+      font-size: 2em;
+      padding: 5px;
+      border: 0;
+      transition: all 0.5s;
+      border-radius: 10px;
+      width: auto;
+      position: relative;
+      min-width: 250px;
+
+      &::after {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f007";
+        position: absolute;
+        left: 80%;
+        top: 54%;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+      }
+
+      &:hover {
+        background: #1b76ed;
+        transition: all 0.5s;
+        border-radius: 10px;
+        box-shadow: 0px 6px 15px #0000ff61;
+        color: #ffffff;
+        padding: 9px  2rem 9px 1.1rem;
+
+        &::after {
+          opacity: 1;
+          transition: all 0.5s;
+          color: #ffffff;
+        }
+      }
+    }
+  }
 }
