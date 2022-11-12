@@ -3,9 +3,12 @@ import "./ProfileInformation.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronLeft, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/atoms";
 
-function ProfileInformation({ isMobile, isTablet, isSmallMobile }) {
+function ProfileInformation({ isTablet, isSmallMobile }) {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [user] = useRecoilState(authState)
     const navigate = useNavigate();
     if (isTablet) {
         return (
@@ -31,9 +34,8 @@ function ProfileInformation({ isMobile, isTablet, isSmallMobile }) {
                         <div className="title">Profile Information</div>
                         <div className="profile-link">Show full profile</div>
                         <div className="block-info">
-                            <div>Nickname: Silentgirl</div>
-                            <div>Email: rachelcurtis@itzpromo.com</div>
-                            <div>Phone number: (805) 651-9088</div>
+                            <div>Email: {user.email}</div>
+                            <div>Phone number: {user.phoneNo}</div>
                             <div>Date of birth: January 20, 1990</div>
                             <div>Gender: Female</div>
                             <div>Languages: English, French</div>
@@ -47,17 +49,15 @@ function ProfileInformation({ isMobile, isTablet, isSmallMobile }) {
             <div className="profile-information">
                 <div className="main-info">
                     <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />
-                    <div className="user-name">Rachel Curtis</div>
+                    <div className="user-name">{`${user.firstName} ${user.lastName}`}</div>
                     <div className="user-address">New York, USA</div>
                 </div>
                 <div className="additional-information">
                     <div className="block-info">
-                        <div>Nickname</div>
-                        <div>Silentgirl</div>
                         <div>Email</div>
-                        <div>rachelcurtis@itzpromo.com</div>
+                        <div>{user.email}</div>
                         <div>Phone number</div>
-                        <div>(805) 651-9088</div>
+                        <div>{user.phoneNo}</div>
                     </div>
                     <div className="block-info">
                         <div>Date of birth</div>

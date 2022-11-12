@@ -1,7 +1,7 @@
 @import "../../assets/_breakpoints.scss";
 
 .profile-information {
-  width: 220px;
+  min-width: 220px;
   background: #191c21;
 
   .main-info {

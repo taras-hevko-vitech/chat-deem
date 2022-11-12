@@ -5,12 +5,11 @@ import MessageList from "./components/MessageList/MessageList";
 import ChatComponent from "./components/ChatComponent/ChatComponent";
 import ProfileInformation from "./components/ProfileInformation/ProfileInformation";
 import AppService from "./service/AppService";
-import { Route, Routes } from "react-router";
-import SignUpForm from "./components/SignUpForm/SignUpForm";
-import Login from "./components/Login/Login";
+import { Navigate, Route, Routes } from "react-router";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
+import AuthPage from "./pages/AuthPage";
 
-function Layout({ userSignUp, userAuth, userLogin, auth }) {
+function Layout() {
     const [windowSize, setWindowSize] = useState(AppService.getWindowSize());
 
     useEffect(() => {
@@ -33,11 +32,16 @@ function Layout({ userSignUp, userAuth, userLogin, auth }) {
             <div className="App">
                 <AppHeaderComponent />
                 <Routes>
-                    <Route path="/" element={<MessageList isMobile={isMobile} isTablet={isTablet} />} />
-                    <Route path="/chat" element={<ChatComponent isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />} />
-                    <Route path="*" element={<MessageList isMobile={isMobile} isTablet={isTablet} />} />
-                    <Route path="/signup" element={<SignUpForm userSignUp={userSignUp} />} />
-                    <Route path="/login" element={<Login userLogin={userLogin} />} />
+                    <Route exact path="/login" element={<AuthRoute guest>
+                        <AuthPage />
+                    </AuthRoute>} />
+                    <Route exact path="/chat-deem" element={<AuthRoute authenticated>
+                        <MessageList isMobile={isMobile} isTablet={isTablet} />
+                    </AuthRoute>} />
+                    <Route exact path="/chat" element={<AuthRoute authenticated>
+                        <ChatComponent isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />
+                    </AuthRoute>} />
+                    <Route path="*" element={<Navigate to="/chat-deem" />}/>
                 </Routes>
             </div>
         );
@@ -45,14 +49,11 @@ function Layout({ userSignUp, userAuth, userLogin, auth }) {
     return (
         <div className="App">
             <Routes>
-                <Route path="/signup" element={<AuthRoute guest userAuth={userAuth}>
-                    <SignUpForm userSignUp={userSignUp} />
+                <Route exact path="/login" element={<AuthRoute guest>
+                    <AuthPage />
                 </AuthRoute>} />
-                <Route exact path="/login" element={<AuthRoute guest auth={auth} userAuth={userAuth}>
-                    <Login userLogin={userLogin} />
-                </AuthRoute>} />
-                <Route path="*" element={
-                    <AuthRoute authenticated userAuth={userAuth}>
+                <Route path="/chat-deem" element={
+                    <AuthRoute authenticated>
                         <AppHeaderComponent />
                         <div className="main">
                             <Teams isMobile={isMobile} isTablet={isTablet} />
@@ -62,7 +63,7 @@ function Layout({ userSignUp, userAuth, userLogin, auth }) {
                         </div>
                     </AuthRoute>
                 } />
-
+                <Route path="*" element={<Navigate to="/chat-deem" />}/>
             </Routes>
         </div>
     );

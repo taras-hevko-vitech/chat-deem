@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import "./SignUpForm.scss";
+import { useMutation } from "@apollo/client";
+import { USER_SIGNUP } from "../../graphql/user";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/atoms";
 
-function SignUpForm({ userSignUp }) {
+function SignUpForm() {
     const [formValues, setFormValues] = useState({
         firstName: "",
         lastName: "",
@@ -9,6 +13,9 @@ function SignUpForm({ userSignUp }) {
         password: "",
         phoneNo: ""
     });
+
+    const [userSignUpMutation] = useMutation(USER_SIGNUP);
+    const [auth, setAuth] = useRecoilState(authState)
 
     const onSubmit = (event) => {
         event.preventDefault()
@@ -23,6 +30,13 @@ function SignUpForm({ userSignUp }) {
         }).catch((e) => {
             console.log(e);
         });
+    };
+
+    const userSignUp = async (input) => {
+        const response = await userSignUpMutation({
+            variables: { input }
+        });
+        setAuth(response.data.userSignUp)
     };
 
     const handleChangeInput = (event) => {
@@ -41,7 +55,7 @@ function SignUpForm({ userSignUp }) {
         setFormValues(newFormValues)
     }
     return (
-        <div className="sign-up main">
+        <div className="sign-up">
             <form onSubmit={onSubmit}>
                 <label className="form__label">
                     First Name
@@ -63,7 +77,7 @@ function SignUpForm({ userSignUp }) {
                     Phone Number
                     <input type="number" className="form__field" name="phoneNo" required onChange={handleChangeInput} value={formValues.phoneNo} />
                 </label>
-                <button type="submit">Sign Up</button>
+                <button type="submit" className="btn-auth">Sign Up</button>
             </form>
         </div>
     );
