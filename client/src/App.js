@@ -5,11 +5,8 @@ import { useRecoilState } from "recoil";
 import { authState } from "./state/atoms";
 
 function App() {
-    const [auth, setAuth] = useRecoilState(authState)
-    console.log(auth);
-
     return (
-        <div className="App">
+        <div className="App">x
             <Layout />
         </div>
     );

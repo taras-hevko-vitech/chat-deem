@@ -39,3 +39,12 @@ export const USER_AUTH = gql`
         }
     }
 `
+
+export const GET_USERS = gql`
+    ${USER_FIELDS}
+    query {
+      getAllUsers {
+        ...UserFields
+      }
+    }
+`
