@@ -10,7 +10,7 @@ const { useServer } = require("graphql-ws/lib/use/ws");
 const mongoose = require("mongoose");
 const authMiddleware = require("./middleware/auth");
 
-const typeDefs = require("./schema");
+const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 const dotenv = require("dotenv");
 

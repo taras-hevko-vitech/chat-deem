@@ -4,9 +4,6 @@ const jwt = require("jsonwebtoken")
 
 
 const Query = {
-    users: (_, args) => {
-        return "STRING"
-    },
     login: async (_, args) => {
         const {email, password} = args;
         const user = await User.findOne({ email })
@@ -29,10 +26,10 @@ const Query = {
     },
     userAuth: async (_, __, context) => {
         const { user } = context
+        if (!user) {
+            throw new Error("Authentication Failed, user not found")
+        }
         try {
-            if (!user) {
-                throw new Error("Authentication Failed, try again later plz")
-            }
             const userInfo = await User.findById(user.id)
             if (userInfo) {
                 return userInfo
@@ -40,11 +37,19 @@ const Query = {
         } catch (e) {
             throw new Error(`Authentication Error, ${e}`)
         }
+    },
+    getAllUsers: async () => {
+        try {
+            const users = await User.find({});
+            return users;
+        } catch (e) {
+            throw new Error(`Database Error, ${e}`)
+        }
     }
 }
 
 const Mutation = {
-    userSignUp: async(_, {input}, context) => {
+    userSignUp: async(_, {input}) => {
         try {
             const hashedPassword = bcrypt.hashSync(input.password)
             const newUser = new User({
@@ -55,7 +60,7 @@ const Mutation = {
 
             return user
         } catch (e) {
-            throw new Error(e)
+            throw new Error(`Sign up error, ${e}`)
         }
     }
 }
@@ -64,36 +69,3 @@ module.exports = {
     Query,
     Mutation
 }
-
-
-
-//const typeDefs = gql`
-//         type Query {
-//             getMessages: String
-//         }
-//         type Mutation {
-//             sendMessage(input: String): String
-//         }
-//         type Subscription {
-//             newMessage: String
-//         }
-// `
-//
-// const resolvers = {
-//     Query: {
-//         getMessages() {
-//             return "HI"
-//         }
-//     },
-//     Mutation: {
-//         sendMessage(_, {input}) {
-//             pubsub.publish("NEW_MESSAGE", {newMessage: input});
-//             return input;
-//         }
-//     },
-//     Subscription: {
-//         newMessage: {
-//             subscribe: () => pubsub.asyncIterator(["NEW_MESSAGE"])
-//         }
-//     }
-// }
