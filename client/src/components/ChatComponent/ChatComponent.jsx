@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ChatComponent.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import MessageComponent from "./MessageComponent/MessageComponent";
 import ProfileInformation from "../ProfileInformation/ProfileInformation";
+import { useMutation, useSubscription } from "@apollo/client";
+import { NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
 
 function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
     const mockMessages = [
@@ -52,16 +54,41 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
         }
     ];
 
+
+    const [sendMessageMutation] = useMutation(SEND_MESSAGE)
+    const { data, loading, error } = useSubscription(
+        NEW_MESSAGE_SUBSCRIBE,
+        { variables: { receiverEmail: "hevko.t@gmail.com" } }
+    );
+
+    const [chatMessages, setChatMessages] = useState([])
+    const [message, setMessage] = useState("")
     const [showUploadMenu, setShowUploadMenu] = useState(false);
-    const onSend = (e) => {
+
+
+    useEffect(() => {
+        console.log(data);
+    }, [data, loading])
+
+
+    const onSend = async (e) => {
         e.preventDefault();
+        const response = await sendMessageMutation({
+            variables: {
+                receiverEmail: "hevko.t@gmail.com",
+                content: message,
+                timestamp: 123123
+            }
+        })
+        console.log(response);
+        setMessage("")
     };
 
     return (
         <div className="chat-component">
             {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />}
             <div className="chat-messages">
-                {mockMessages.map((mess, i) => (
+                {chatMessages.map((mess, i) => (
                     <MessageComponent
                         key={i}
                         isMy={1 === mess.userId}
@@ -73,9 +100,18 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
                 ))}
             </div>
             <form className="chat-footer" onSubmit={onSend}>
-                <FontAwesomeIcon icon={faPaperclip} className="upload-clip"
-                                 onClick={() => setShowUploadMenu(!showUploadMenu)} />
-                <input type="text" className="typing-area" placeholder="Type your message…" />
+                <FontAwesomeIcon
+                    icon={faPaperclip}
+                    className="upload-clip"
+                    onClick={() => setShowUploadMenu(!showUploadMenu)}
+                />
+                <input
+                    type="text"
+                    className="typing-area"
+                    placeholder="Type your message…"
+                    onChange={e => setMessage(e.target.value)}
+                    value={message}
+                />
                 <button type="submit">SEND</button>
                 {showUploadMenu && (
                     <div className="upload-menu">

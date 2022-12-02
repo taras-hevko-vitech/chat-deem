@@ -1,10 +1,14 @@
-const userResolver = require("./userResolver")
+const userResolver = require("./userResolver");
+const messageResolver = require("./messageResolver");
 
 module.exports = {
     Query: {
-        ...userResolver.Query
+        ...userResolver.Query,
     },
     Mutation: {
-        ...userResolver.Mutation
+        ...userResolver.Mutation,
+    },
+    Subscription: {
+        ...userResolver.Subscription
     }
-}
+};

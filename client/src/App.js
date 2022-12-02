@@ -6,7 +6,7 @@ import { authState } from "./state/atoms";
 
 function App() {
     return (
-        <div className="App">x
+        <div className="App">
             <Layout />
         </div>
     );
