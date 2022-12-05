@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 const MESSAGE_FIELDS = gql`
     fragment messageFields on Message {
-        senderEmail
-        receiverEmail
+        senderId
+        receiverId
         content
         timestamp
     }
@@ -13,12 +13,12 @@ const MESSAGE_FIELDS = gql`
 export const SEND_MESSAGE = gql`
     ${MESSAGE_FIELDS}
     mutation sendMessage(
-      $receiverEmail: String!
+      $receiverId: String!
       $content: String!
       $timestamp: Float!
     ) {
       sendMessage(
-        receiverEmail: $receiverEmail
+        receiverId: $receiverId
         content: $content
         timestamp: $timestamp
       ) {
@@ -28,11 +28,11 @@ export const SEND_MESSAGE = gql`
 `
 
 export const NEW_MESSAGE_SUBSCRIBE = gql`
-    subscription($receiverEmail: String!) {
-      newMessage(receiverEmail: $receiverEmail) {
+    subscription($receiverId: String!) {
+      newMessage(receiverId: $receiverId) {
         content
-        senderEmail
-        receiverEmail
+        senderId
+        receiverId
         id
         timestamp
         users {

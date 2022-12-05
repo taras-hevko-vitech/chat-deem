@@ -6,81 +6,42 @@ import MessageComponent from "./MessageComponent/MessageComponent";
 import ProfileInformation from "../ProfileInformation/ProfileInformation";
 import { useMutation, useSubscription } from "@apollo/client";
 import { NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/atoms";
 
 function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
-    const mockMessages = [
-        {
-            userId: 1,
-            type: "TEXT",
-            message: "Maybe you already have additional info?",
-            date: "14:00pm",
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        },
-        {
-            userId: 1,
-            type: "TEXT",
-            message: "It is to early to provide some kind of estimation here. We need user stories.",
-            date: "14:00pm",
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        },
-        {
-            userId: 2,
-            type: "TEXT",
-            message: "We are just writing up the user stories now so will have requirements for you next week. ",
-            date: "14:00pm",
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        },
-        {
-            userId: 2,
-            type: "TEXT",
-            message:
-                "Essentially the brief is for you guys to build an iOS and android app. We will do backend and web app. We have a version one mockup of the UI, please see it attached. As mentioned before, we would simply hand you all the assets for the UI and you guys code. If you have any early questions please do send them on to myself. Ill be in touch in coming days when we have requirements prepared. ",
-            date: "14:00pm",
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        },
-        {
-            userId: 2,
-            type: "FILE",
-            message: "123",
-            date: "14:00pm",
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        },
-        {
-            userId: 1,
-            type: "TEXT",
-            message: "123",
-            date: "14:00pm",
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        }
-    ];
-
-
-    const [sendMessageMutation] = useMutation(SEND_MESSAGE)
-    const { data, loading, error } = useSubscription(
-        NEW_MESSAGE_SUBSCRIBE,
-        { variables: { receiverEmail: "hevko.t@gmail.com" } }
-    );
-
     const [chatMessages, setChatMessages] = useState([])
     const [message, setMessage] = useState("")
     const [showUploadMenu, setShowUploadMenu] = useState(false);
 
-
+    const [auth] = useRecoilState(authState)
+    const [sendMessageMutation] = useMutation(SEND_MESSAGE)
+    const { data, loading, error } = useSubscription(
+        NEW_MESSAGE_SUBSCRIBE,
+        { variables: { receiverId: localStorage.getItem("chatID") } },
+    );
     useEffect(() => {
-        console.log(data);
-    }, [data, loading])
-
+        if (data && !loading) {
+            const {newMessage} = data;
+            const chatMessage = {
+                isMy: newMessage.senderId === auth.id,
+                message: newMessage.content,
+                date: newMessage.timestamp,
+                image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
+            }
+            setChatMessages([...chatMessages, {...chatMessage}])
+        }
+    }, [data])
 
     const onSend = async (e) => {
         e.preventDefault();
-        const response = await sendMessageMutation({
+        await sendMessageMutation({
             variables: {
-                receiverEmail: "hevko.t@gmail.com",
+                receiverId: localStorage.getItem("chatID"),
                 content: message,
                 timestamp: 123123
             }
         })
-        console.log(response);
         setMessage("")
     };
 
@@ -91,7 +52,7 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
                 {chatMessages.map((mess, i) => (
                     <MessageComponent
                         key={i}
-                        isMy={1 === mess.userId}
+                        isMy={mess.isMy}
                         type={mess.type}
                         message={mess.message}
                         date={mess.date}

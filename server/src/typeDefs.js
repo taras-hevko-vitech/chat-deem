@@ -5,21 +5,21 @@ const typeDefs = gql`
         login(email: String!, password: String!): LoginPayload
         userAuth: User
         getAllUsers: [User]
-        messageByUser(receiverEmail: String!): [Message]
+        messageByUser(receiverId: String!): [Message]
     }
     type Mutation {
         userSignUp(input: UserSignUpInput!): User
         deleteUser(username: String!): Boolean!
-        userTyping(username: String! receiverEmail: String!): Boolean!
-        sendMessage(receiverEmail: String! content: String! timestamp: Float!): Message!
+        userTyping(username: String! receiverId: String!): Boolean!
+        sendMessage(receiverId: String! content: String! timestamp: Float!): Message!
         updateMessage(id: ID! content: String!): Message!
         deleteMessage(id: ID!): Boolean!
     }
     type Subscription {
-        newMessage(receiverEmail: String!): Message
+        newMessage(receiverId: String!): Message
         newUser: User
         oldUser: String
-        userTyping (receiverEmail: String!): String
+        userTyping (receiverId: String!): String
     }
     
     type User {
@@ -35,8 +35,8 @@ const typeDefs = gql`
     type Message {
         id: ID!
         content: String!
-        senderEmail: String!
-        receiverEmail: String!
+        senderId: String!
+        receiverId: String!
         timestamp: Float!
         users: [User]
     }
