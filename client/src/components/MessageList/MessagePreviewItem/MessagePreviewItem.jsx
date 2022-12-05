@@ -3,7 +3,7 @@ import "./MessagePreviewItem.scss";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import {selectedChat} from "../../../state/atoms";
 
@@ -13,7 +13,7 @@ function MessagePreviewItem({ previewData, isMobile }) {
 
     const {
         firstName,
-        id,
+        id = previewData.id,
         lastName,
         photoURL = "https://picsum.photos/seed/picsum/200/300",
         onlineStatus,
@@ -31,6 +31,7 @@ function MessagePreviewItem({ previewData, isMobile }) {
         if (isMobile) {
             navigate("/chat")
         }
+        localStorage.setItem("chatID", id)
         setChat(id)
     }
 

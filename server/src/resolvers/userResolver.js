@@ -53,10 +53,10 @@ const resolvers = {
                 throw new Error(`Database Error, ${e}`)
             }
         },
-        messageByUser: async (_, {receiverEmail}, {context}) => {
+        messageByUser: async (_, {receiverId}, {context}) => {
             const { user } = context
             if (!user) throw new Error("You have to log in")
-            const messages = await Message.find({senderEmail: receiverEmail, receiverEmail: user.email})
+            const messages = await Message.find({senderId: receiverId, receiverId: user.id})
             return messages
 
         }
@@ -78,27 +78,27 @@ const resolvers = {
             return true
         },
 
-        userTyping: async (_, { email, receiverEmail }) => {
+        userTyping: async (_, { email, receiverId }) => {
             await pubsub.publish("userTyping", {
                 userTyping: email,
-                receiverEmail,
+                receiverId,
             })
             return true
         },
 
         sendMessage: async (_, args, {context}) => {
             const { user } = context
-            const { receiverEmail, content, timestamp} = args
+            const { receiverId, content, timestamp} = args
             const userText = new Message({
-                senderEmail: user.email,
-                receiverEmail,
+                senderId: user.id,
+                receiverId,
                 content,
                 timestamp,
             })
             await userText.save()
             await pubsub.publish(MESSAGE_ADDED, {
                 newMessage: userText,
-                receiverEmail,
+                receiverId,
             })
             return userText
         },
@@ -132,7 +132,14 @@ const resolvers = {
 
     Subscription: {
         newMessage: {
-            subscribe:()=>pubsub.asyncIterator(MESSAGE_ADDED)
+            subscribe: withFilter(
+                () => pubsub.asyncIterator("newMessage"),
+                (payload, variables) => {
+                    return (
+                        payload.receiverId === variables.receiverId
+                    )
+                }
+            ),
         },
 
         newUser: {
@@ -152,7 +159,7 @@ const resolvers = {
                 () => pubsub.asyncIterator("userTyping"),
                 (payload, variables) => {
                     return (
-                        payload.receiverEmail === variables.receiverEmail
+                        payload.receiverId === variables.receiverId
                     )
                 }
             ),
