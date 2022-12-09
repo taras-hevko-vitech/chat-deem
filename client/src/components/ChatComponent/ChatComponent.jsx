@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ChatComponent.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
@@ -7,18 +7,21 @@ import ProfileInformation from "../ProfileInformation/ProfileInformation";
 import { useMutation, useSubscription } from "@apollo/client";
 import { NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
-import { authState } from "../../state/atoms";
+import { authState, selectedChatId } from "../../state/atoms";
 
 function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
+    const messagesEndRef = useRef(null);
     const [chatMessages, setChatMessages] = useState([])
     const [message, setMessage] = useState("")
     const [showUploadMenu, setShowUploadMenu] = useState(false);
 
     const [auth] = useRecoilState(authState)
+    const [chatId] = useRecoilState(selectedChatId)
     const [sendMessageMutation] = useMutation(SEND_MESSAGE)
     const { data, loading, error } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
         { variables: { receiverId: auth.id } })
+
     useEffect(() => {
         if (data && !loading) {
             const {newMessage} = data;
@@ -36,7 +39,7 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
         e.preventDefault();
         await sendMessageMutation({
             variables: {
-                receiverId: localStorage.getItem("chatID"),
+                receiverId: chatId,
                 content: message,
                 timestamp: 123123
             }
@@ -49,11 +52,10 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
         }])
         setMessage("")
     };
-    console.log(data);
     return (
         <div className="chat-component">
             {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />}
-            <div className="chat-messages">
+            <div className="chat-messages" ref={messagesEndRef}>
                 {chatMessages.map((mess, i) => (
                     <MessageComponent
                         key={i}

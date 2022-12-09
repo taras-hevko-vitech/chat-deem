@@ -6,7 +6,7 @@ export const authState = atom({
     default: null
 })
 
-export const selectedChat = atom({
+export const selectedChatId = atom({
     key: "selectedChat",
     default: null
 })

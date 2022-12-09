@@ -1,16 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProfileInformation.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronLeft, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { selectedChat } from "../../state/atoms";
+import { selectedChatId } from "../../state/atoms";
+import { useLazyQuery } from "@apollo/client";
+import { GET_USER_BY_ID } from "../../graphql/user";
 
 function ProfileInformation({ isTablet, isSmallMobile }) {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
-    const [chat] = useRecoilState(selectedChat)
+    const [profile, setProfile] = useState({
+        email: "",
+        firstName: "",
+        id: "",
+        lastName: "",
+        phoneNo: ""
+    })
+    const [chatId] = useRecoilState(selectedChatId)
+    const [getUserQuery] = useLazyQuery(GET_USER_BY_ID)
     const navigate = useNavigate();
-    console.log(chat);
+
+    useEffect(() => {
+        if (chatId) {
+            getUserById()
+        }
+    }, [chatId])
+
+    const getUserById = async () => {
+        const user = await getUserQuery({
+            variables: {
+                id: chatId,
+            }
+        })
+        setProfile(user.data.getUserById)
+    }
     if (isTablet) {
         return (
             <>
@@ -50,15 +74,15 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
             <div className="profile-information">
                 <div className="main-info">
                     <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />
-                    <div className="user-name">{`${"user.firstName"} ${"user.lastName"}`}</div>
+                    <div className="user-name">{`${profile.firstName} ${profile.lastName}`}</div>
                     <div className="user-address">New York, USA</div>
                 </div>
                 <div className="additional-information">
                     <div className="block-info">
                         <div>Email</div>
-                        <div>{"user.email"}</div>
+                        <div>{profile.email}</div>
                         <div>Phone number</div>
-                        <div>{"user.phoneNo"}</div>
+                        <div>{profile.phoneNo}</div>
                     </div>
                     <div className="block-info">
                         <div>Date of birth</div>
