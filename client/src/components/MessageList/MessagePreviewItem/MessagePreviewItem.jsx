@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import {selectedChat} from "../../../state/atoms";
+import {selectedChatId} from "../../../state/atoms";
 
 function MessagePreviewItem({ previewData, isMobile }) {
     const navigate = useNavigate();
-    const [chat, setChat] = useRecoilState(selectedChat)
+    const [chatId, setChatId] = useRecoilState(selectedChatId)
 
     const {
         firstName,
@@ -31,8 +31,7 @@ function MessagePreviewItem({ previewData, isMobile }) {
         if (isMobile) {
             navigate("/chat")
         }
-        localStorage.setItem("chatID", id)
-        setChat(id)
+        setChatId(id)
     }
 
     return (

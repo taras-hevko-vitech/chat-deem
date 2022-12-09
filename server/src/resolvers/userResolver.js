@@ -53,6 +53,14 @@ const resolvers = {
                 throw new Error(`Database Error, ${e}`)
             }
         },
+        getUserById: async (_, {id}) => {
+            try {
+                const user = await User.findById(id)
+                return user
+            } catch (e) {
+                throw new Error(`Database Error, ${e}`)
+            }
+        },
         messageByUser: async (_, {receiverId}, {context}) => {
             const { user } = context
             if (!user) throw new Error("You have to log in")

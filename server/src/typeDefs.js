@@ -5,6 +5,7 @@ const typeDefs = gql`
         login(email: String!, password: String!): LoginPayload
         userAuth: User
         getAllUsers: [User]
+        getUserById(id: String!): User
         messageByUser(receiverId: String!): [Message]
     }
     type Mutation {
