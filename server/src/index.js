@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const context = require("./middleware/auth");
 
 const typeDefs = require("./typeDefs");
-const resolvers = require("./resolvers/userResolver");
+const resolvers = require("./resolvers");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -23,14 +23,12 @@ const PORT = process.env.PORT || 4003;
 
 mongoose.connect(`mongodb+srv://mostwanter:${process.env.DB_PASSWORD}@cluster0.tt5lljq.mongodb.net/?retryWrites=true&w=majority`);
 
-
 const wsServer = new WebSocketServer({
     server: httpServer,
     path: "/graphql"
 });
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-
 
 const server = new ApolloServer({
     schema,

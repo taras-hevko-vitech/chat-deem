@@ -4,11 +4,13 @@ const messageResolver = require("./messageResolver");
 module.exports = {
     Query: {
         ...userResolver.Query,
+        ...messageResolver.Query
     },
     Mutation: {
         ...userResolver.Mutation,
+        ...messageResolver.Mutation
     },
     Subscription: {
-        ...userResolver.Subscription
+        ...messageResolver.Subscription
     }
 };
