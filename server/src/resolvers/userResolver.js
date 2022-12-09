@@ -105,8 +105,7 @@ const resolvers = {
             })
             await userText.save()
             await pubsub.publish(MESSAGE_ADDED, {
-                newMessage: userText,
-                receiverId,
+                newMessage: userText
             })
             return userText
         },
@@ -140,14 +139,7 @@ const resolvers = {
 
     Subscription: {
         newMessage: {
-            subscribe: withFilter(
-                () => pubsub.asyncIterator(MESSAGE_ADDED),
-                (payload, variables) => {
-                    return (
-                        payload.receiverId === variables.receiverId
-                    )
-                }
-            ),
+            subscribe: () => pubsub.asyncIterator(MESSAGE_ADDED),
         },
 
         newUser: {
