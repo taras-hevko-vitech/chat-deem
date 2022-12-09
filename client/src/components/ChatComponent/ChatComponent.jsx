@@ -60,15 +60,16 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
         });
         setMessage("");
     };
+    console.log(chatMessages);
     return (
         <div className="chat-component">
             {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />}
             <div className="chat-messages">
                 {chatMessages.map((mess, i) => (
+                    mess &&
                     <MessageComponent
                         key={`${i}+${mess.id}`}
                         isMyMessage={mess.senderId === auth.id}
-                        type={mess.type}
                         message={mess.content}
                         date={mess.timestamp}
                     />
