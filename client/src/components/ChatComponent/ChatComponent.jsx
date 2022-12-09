@@ -18,8 +18,7 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
     const [sendMessageMutation] = useMutation(SEND_MESSAGE)
     const { data, loading, error } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
-        { variables: { receiverId: localStorage.getItem("chatID") } },
-    );
+        { variables: { receiverId: auth.id } })
     useEffect(() => {
         if (data && !loading) {
             const {newMessage} = data;
@@ -29,7 +28,7 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
                 date: newMessage.timestamp,
                 image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
             }
-            setChatMessages([...chatMessages, {...chatMessage}])
+            setChatMessages([...chatMessages, chatMessage])
         }
     }, [data])
 
@@ -42,9 +41,15 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
                 timestamp: 123123
             }
         })
+        setChatMessages([...chatMessages, {
+            isMy: true,
+            message: message,
+            date: 123123,
+            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
+        }])
         setMessage("")
     };
-
+    console.log(data);
     return (
         <div className="chat-component">
             {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />}

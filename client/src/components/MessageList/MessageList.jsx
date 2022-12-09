@@ -9,6 +9,7 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_USERS } from "../../graphql/user";
 
 function MessageList({ isMobile }) {
+    const [searchValue, setSearchValue] = useState("")
     const [showChannelList, setShowChannelList] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
@@ -25,11 +26,35 @@ function MessageList({ isMobile }) {
         getAllUsers();
     }, []);
 
+    useEffect(() => {
+        handleSearchChange()
+    }, [searchValue])
+
     const searchClassname = classNames({
         "search-wrapper": true,
         active: showSearchInput
     });
 
+    const handleSearchChange = () => {
+        if (searchValue.length === 0) {
+            getAllUsers();
+        }
+        const filteredUsers = allUsers.filter(user => {
+            const name = user.firstName.toLowerCase();
+            const lastName = user.lastName.toLowerCase();
+            if (name.includes(searchValue) || lastName.includes(searchValue)) {
+                return user
+            }
+        })
+        setAllUsers(filteredUsers)
+    }
+    const handleKeyDown = event => {
+        if (event.key === "Escape") {
+            setShowSearchInput(false)
+            setSearchValue("")
+            getAllUsers()
+        }
+    };
     return (
         <div className="message-list">
             {showChannelList && isMobile && <Teams showChannelList={showChannelList} setShowChannelList={setShowChannelList} />}
@@ -46,7 +71,7 @@ function MessageList({ isMobile }) {
                         <div className="search-icon">
                             <FontAwesomeIcon icon={faSearch} onClick={() => setShowSearchInput(!showSearchInput)} />
                         </div>
-                        <input type="text" className="search-input" placeholder="Search" />
+                        <input type="text" className="search-input" placeholder="Search" value={searchValue} onChange={e => setSearchValue(e.target.value.toLowerCase())} onKeyDown={handleKeyDown}/>
                     </div>
                 </div>
                 <div className="message-tabs">
