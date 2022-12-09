@@ -3,7 +3,7 @@ import "./MessagePreviewItem.scss";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import {selectedChat} from "../../../state/atoms";
 
