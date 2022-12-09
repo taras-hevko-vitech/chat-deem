@@ -4,9 +4,11 @@
   align-items: center;
   justify-content: center;
   padding: 30px;
+
   .auth-switcher {
     display: flex;
     margin-bottom: 70px;
+
     .switcher {
       padding: 0.6em 2em;
       border: none;
@@ -20,17 +22,17 @@
       user-select: none;
       -webkit-user-select: none;
       touch-action: manipulation;
-  }
+    }
 
-  .switcher:before {
+    .switcher:before {
       content: "";
       background: linear-gradient(
-              45deg,
-              #fffb00,
-              #48ff00,
-              #00ffd5,
-              #002bff,
-              #7a00ff
+                      45deg,
+                      #fffb00,
+                      #48ff00,
+                      #00ffd5,
+                      #002bff,
+                      #7a00ff
       );
       position: absolute;
       top: -2px;
@@ -44,21 +46,21 @@
       animation: glowing-button 20s linear infinite;
       transition: opacity 0.3s ease-in-out;
       border-radius: 10px;
-  }
+    }
 
-  @keyframes glowing-button {
+    @keyframes glowing-button {
       0% {
-          background-position: 0 0;
+        background-position: 0 0;
       }
       50% {
-          background-position: 400% 0;
+        background-position: 400% 0;
       }
       100% {
-          background-position: 0 0;
+        background-position: 0 0;
       }
-  }
+    }
 
-  .switcher:after {
+    .switcher:after {
       z-index: -1;
       content: "";
       position: absolute;
@@ -68,7 +70,7 @@
       left: 0;
       top: 0;
       border-radius: 10px;
-  }
+    }
 
   }
 }

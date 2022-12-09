@@ -6,12 +6,12 @@ import { authState } from "../../../state/atoms";
 
 function ProfileMenu({ props }) {
     const [showMenu, setShowMenu] = useState(false);
-    const [auth, setAuth] = useRecoilState(authState)
+    const [auth, setAuth] = useRecoilState(authState);
 
     const logout = () => {
-        setAuth(null)
-        localStorage.removeItem("token")
-    }
+        setAuth(null);
+        localStorage.removeItem("token");
+    };
 
     return (
         <div className="profile-menu" onClick={() => setShowMenu(!showMenu)}>

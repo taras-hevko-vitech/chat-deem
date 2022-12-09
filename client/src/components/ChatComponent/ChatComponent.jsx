@@ -4,68 +4,79 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import MessageComponent from "./MessageComponent/MessageComponent";
 import ProfileInformation from "../ProfileInformation/ProfileInformation";
-import { useMutation, useSubscription } from "@apollo/client";
-import { NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
+import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
+import { GET_MESSAGES, NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "../../state/atoms";
 
 function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
-    const messagesEndRef = useRef(null);
-    const [chatMessages, setChatMessages] = useState([])
-    const [message, setMessage] = useState("")
+    const [chatMessages, setChatMessages] = useState([]);
+    const [message, setMessage] = useState("");
     const [showUploadMenu, setShowUploadMenu] = useState(false);
+    const [auth] = useRecoilState(authState);
+    const [chatId] = useRecoilState(selectedChatId);
 
-    const [auth] = useRecoilState(authState)
-    const [chatId] = useRecoilState(selectedChatId)
-    const [sendMessageMutation] = useMutation(SEND_MESSAGE)
+    const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
+    const [sendMessageMutation] = useMutation(SEND_MESSAGE);
     const { data, loading, error } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
-        { variables: { receiverId: auth.id } })
+        { variables: { receiverId: auth.id } });
+
+    const messagesEndRef = useRef(null);
+    useEffect(() => {
+        scrollToBottom();
+    }, [chatMessages]);
+
+    useEffect(() => {
+        chatId && getMessages();
+    }, [chatId]);
 
     useEffect(() => {
         if (data && !loading) {
-            const {newMessage} = data;
-            const chatMessage = {
-                isMy: newMessage.senderId === auth.id,
-                message: newMessage.content,
-                date: newMessage.timestamp,
-                image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-            }
-            setChatMessages([...chatMessages, chatMessage])
+            const { newMessage } = data;
+            setChatMessages([...chatMessages, { ...newMessage }]);
         }
-    }, [data])
+    }, [data]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+    const getMessages = async () => {
+        const messages = await getMessagesQuery({
+            variables: { receiverId: chatId }
+        });
+        setChatMessages([...messages.data.messageByUser]);
+    };
 
     const onSend = async (e) => {
         e.preventDefault();
-        await sendMessageMutation({
+        const response = await sendMessageMutation({
             variables: {
                 receiverId: chatId,
                 content: message,
                 timestamp: 123123
             }
-        })
-        setChatMessages([...chatMessages, {
-            isMy: true,
-            message: message,
-            date: 123123,
-            image: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
-        }])
-        setMessage("")
+        });
+        setMessage("");
+        const myMessage = response.data.sendMessage;
+        if (myMessage.senderId === auth.id) {
+            setChatMessages([...chatMessages, { ...myMessage }]);
+        }
     };
     return (
         <div className="chat-component">
             {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />}
-            <div className="chat-messages" ref={messagesEndRef}>
+            <div className="chat-messages">
                 {chatMessages.map((mess, i) => (
                     <MessageComponent
-                        key={i}
-                        isMy={mess.isMy}
+                        key={`${i}+${mess.id}`}
+                        isMyMessage={mess.senderId === auth.id}
                         type={mess.type}
-                        message={mess.message}
-                        date={mess.date}
-                        image={mess.image}
+                        message={mess.content}
+                        date={mess.timestamp}
                     />
                 ))}
+                <div ref={messagesEndRef} />
             </div>
             <form className="chat-footer" onSubmit={onSend}>
                 <FontAwesomeIcon

@@ -9,6 +9,7 @@
   padding: 15px 0 0;
   margin-top: 10px;
   color: white;
+
   > form {
     //input:-webkit-autofill,
     //input:-webkit-autofill:hover,
@@ -50,7 +51,7 @@
         border-radius: 10px;
         box-shadow: 0px 6px 15px #0000ff61;
         color: #ffffff;
-        padding: 9px  2rem 9px 1.1rem;
+        padding: 9px 2rem 9px 1.1rem;
 
         &::after {
           opacity: 1;

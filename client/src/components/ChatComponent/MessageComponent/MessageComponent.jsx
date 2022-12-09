@@ -2,19 +2,24 @@ import React from "react";
 import "./MessageComponent.scss";
 import classNames from "classnames";
 
-function MessageComponent({ isMy, date, message, type, image }) {
+function MessageComponent({
+      isMyMessage,
+      date,
+      message,
+      image = "https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
+  }) {
     const messageStyles = classNames({
         "message-content": true,
-        "your-message": isMy,
-        "not-your-message": !isMy
+        "your-message": isMyMessage,
+        "not-your-message": !isMyMessage
     });
 
     return (
-        <div className="message-container" style={{ alignItems: isMy ? "flex-end" : "flex-start" }}>
+        <div className="message-container" style={{ alignItems: isMyMessage ? "flex-end" : "flex-start" }}>
             <div className="message">
-                {!isMy && <img src={image} alt="" className="avatar" />}
+                {!isMyMessage && <img src={image} alt="" className="avatar" />}
                 <div className={messageStyles}>{message}</div>
-                {isMy && <img src={image} alt="" className="avatar" />}
+                {isMyMessage && <img src={image} alt="" className="avatar" />}
             </div>
             <div className="date">{date}</div>
         </div>

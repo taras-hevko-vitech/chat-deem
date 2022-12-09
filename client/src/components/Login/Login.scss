@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     .btn-auth {
       font-family: Avenir-Roman, sans-serif;
       background: #25c14a;
@@ -49,7 +50,7 @@
         border-radius: 10px;
         box-shadow: 0px 6px 15px #0000ff61;
         color: #ffffff;
-        padding: 9px  2rem 9px 1.1rem;
+        padding: 9px 2rem 9px 1.1rem;
 
         &::after {
           opacity: 1;

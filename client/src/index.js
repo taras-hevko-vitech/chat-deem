@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { client } from "./graphql/ApolloClient";
 import App from "./App";
 import { ApolloProvider } from "@apollo/client";
-import {RecoilRoot} from "recoil"
+import { RecoilRoot } from "recoil";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

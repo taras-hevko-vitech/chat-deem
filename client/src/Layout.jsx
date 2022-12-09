@@ -41,7 +41,7 @@ function Layout() {
                     <Route exact path="/chat" element={<AuthRoute authenticated>
                         <ChatComponent isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />
                     </AuthRoute>} />
-                    <Route path="*" element={<Navigate to="/chat-deem" />}/>
+                    <Route path="*" element={<Navigate to="/chat-deem" />} />
                 </Routes>
             </div>
         );
@@ -63,7 +63,7 @@ function Layout() {
                         </div>
                     </AuthRoute>
                 } />
-                <Route path="*" element={<Navigate to="/chat-deem" />}/>
+                <Route path="*" element={<Navigate to="/chat-deem" />} />
             </Routes>
         </div>
     );
