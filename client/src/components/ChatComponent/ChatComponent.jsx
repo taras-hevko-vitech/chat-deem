@@ -18,9 +18,17 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
 
     const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
-    const { data, loading, error } = useSubscription(
+    const { data: onData } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
-        { variables: { receiverId: auth.id } });
+        { variables: { receiverId: chatId },
+                onSubscriptionData({subscriptionData: { data}}) {
+                    if ((data.newMessage.receiverId === chatId && data.newMessage.senderId === auth.id) ||
+                        (data.newMessage.receiverId === auth.id && data.newMessage.senderId === chatId)
+                    ) {
+                        setChatMessages([...chatMessages, data.newMessage])
+                    }
+                }
+        });
 
     const messagesEndRef = useRef(null);
     useEffect(() => {
@@ -28,40 +36,29 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
     }, [chatMessages]);
 
     useEffect(() => {
+        const getMessages = async () => {
+            const messages = await getMessagesQuery({
+                variables: { receiverId: chatId }
+            });
+            setChatMessages([...messages.data.messageByUser]);
+        };
         chatId && getMessages();
     }, [chatId]);
-
-    useEffect(() => {
-        if (data && !loading) {
-            const { newMessage } = data;
-            setChatMessages([...chatMessages, { ...newMessage }]);
-        }
-    }, [data]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
-    const getMessages = async () => {
-        const messages = await getMessagesQuery({
-            variables: { receiverId: chatId }
-        });
-        setChatMessages([...messages.data.messageByUser]);
-    };
 
     const onSend = async (e) => {
         e.preventDefault();
-        const response = await sendMessageMutation({
+        await sendMessageMutation({
             variables: {
                 receiverId: chatId,
                 content: message,
-                timestamp: 123123
+                timestamp: 321341324321431
             }
         });
         setMessage("");
-        const myMessage = response.data.sendMessage;
-        if (myMessage.senderId === auth.id) {
-            setChatMessages([...chatMessages, { ...myMessage }]);
-        }
     };
     return (
         <div className="chat-component">
