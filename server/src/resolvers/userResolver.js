@@ -64,7 +64,7 @@ const resolvers = {
         messageByUser: async (_, {receiverId}, {context}) => {
             const { user } = context
             if (!user) throw new Error("You have to log in")
-            const messages = await Message.find({senderId: receiverId, receiverId: user.id})
+            const messages = await Message.find({$or: [{senderId: receiverId, receiverId: user.id}, {senderId: user.id, receiverId: receiverId}]})
             return messages
 
         }
@@ -141,7 +141,7 @@ const resolvers = {
     Subscription: {
         newMessage: {
             subscribe: withFilter(
-                () => pubsub.asyncIterator("newMessage"),
+                () => pubsub.asyncIterator(MESSAGE_ADDED),
                 (payload, variables) => {
                     return (
                         payload.receiverId === variables.receiverId

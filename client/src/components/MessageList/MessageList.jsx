@@ -9,7 +9,7 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_USERS } from "../../graphql/user";
 
 function MessageList({ isMobile }) {
-    const [searchValue, setSearchValue] = useState("")
+    const [searchValue, setSearchValue] = useState("");
     const [showChannelList, setShowChannelList] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
@@ -27,8 +27,8 @@ function MessageList({ isMobile }) {
     }, []);
 
     useEffect(() => {
-        handleSearchChange()
-    }, [searchValue])
+        handleSearchChange();
+    }, [searchValue]);
 
     const searchClassname = classNames({
         "search-wrapper": true,
@@ -43,21 +43,22 @@ function MessageList({ isMobile }) {
             const name = user.firstName.toLowerCase();
             const lastName = user.lastName.toLowerCase();
             if (name.includes(searchValue) || lastName.includes(searchValue)) {
-                return user
+                return user;
             }
-        })
-        setAllUsers(filteredUsers)
-    }
+        });
+        setAllUsers(filteredUsers);
+    };
     const handleKeyDown = event => {
         if (event.key === "Escape") {
-            setShowSearchInput(false)
-            setSearchValue("")
-            getAllUsers()
+            setShowSearchInput(false);
+            setSearchValue("");
+            getAllUsers();
         }
     };
     return (
         <div className="message-list">
-            {showChannelList && isMobile && <Teams showChannelList={showChannelList} setShowChannelList={setShowChannelList} />}
+            {showChannelList && isMobile &&
+                <Teams showChannelList={showChannelList} setShowChannelList={setShowChannelList} />}
             <div className="list-header">
                 {isMobile && (
                     <div className="channel-list-btn" onClick={() => setShowChannelList(!showChannelList)}>
@@ -71,7 +72,8 @@ function MessageList({ isMobile }) {
                         <div className="search-icon">
                             <FontAwesomeIcon icon={faSearch} onClick={() => setShowSearchInput(!showSearchInput)} />
                         </div>
-                        <input type="text" className="search-input" placeholder="Search" value={searchValue} onChange={e => setSearchValue(e.target.value.toLowerCase())} onKeyDown={handleKeyDown}/>
+                        <input type="text" className="search-input" placeholder="Search" value={searchValue}
+                               onChange={e => setSearchValue(e.target.value.toLowerCase())} onKeyDown={handleKeyDown} />
                     </div>
                 </div>
                 <div className="message-tabs">
@@ -82,7 +84,7 @@ function MessageList({ isMobile }) {
             </div>
             <div className="chat-list">
                 {allUsers.map((chat, i) => (
-                    <MessagePreviewItem key={i} previewData={chat} isMobile={isMobile}/>
+                    <MessagePreviewItem key={i} previewData={chat} isMobile={isMobile} />
                 ))}
             </div>
         </div>

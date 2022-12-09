@@ -29,7 +29,7 @@ export const LOGIN = gql`
         token
       }
     }
-`
+`;
 
 export const USER_AUTH = gql`
     ${USER_FIELDS}
@@ -38,7 +38,7 @@ export const USER_AUTH = gql`
             ...UserFields
         }
     }
-`
+`;
 
 export const GET_USERS = gql`
     ${USER_FIELDS}
@@ -47,7 +47,7 @@ export const GET_USERS = gql`
         ...UserFields
       }
     }
-`
+`;
 
 export const GET_USER_BY_ID = gql`
     ${USER_FIELDS}
@@ -56,4 +56,4 @@ export const GET_USER_BY_ID = gql`
             ...UserFields
         }
     }
-`
+`;

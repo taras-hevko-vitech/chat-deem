@@ -16,25 +16,25 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
         id: "",
         lastName: "",
         phoneNo: ""
-    })
-    const [chatId] = useRecoilState(selectedChatId)
-    const [getUserQuery] = useLazyQuery(GET_USER_BY_ID)
+    });
+    const [chatId] = useRecoilState(selectedChatId);
+    const [getUserQuery] = useLazyQuery(GET_USER_BY_ID);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (chatId) {
-            getUserById()
+            getUserById();
         }
-    }, [chatId])
+    }, [chatId]);
 
     const getUserById = async () => {
         const user = await getUserQuery({
             variables: {
-                id: chatId,
+                id: chatId
             }
-        })
-        setProfile(user.data.getUserById)
-    }
+        });
+        setProfile(user.data.getUserById);
+    };
     if (isTablet) {
         return (
             <>
@@ -59,8 +59,8 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
                         <div className="title">Profile Information</div>
                         <div className="profile-link">Show full profile</div>
                         <div className="block-info">
-                            <div>Email: {'user.email'}</div>
-                            <div>Phone number: {'user.phoneNo'}</div>
+                            <div>Email: {"user.email"}</div>
+                            <div>Phone number: {"user.phoneNo"}</div>
                             <div>Date of birth: January 20, 1990</div>
                             <div>Gender: Female</div>
                             <div>Languages: English, French</div>
