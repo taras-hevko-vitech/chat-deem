@@ -30,6 +30,8 @@ ul {
     font-style: normal;
     line-height: 1.43;
     letter-spacing: normal;
+    height: 100%;
+    background: #181c20;
     @include s {
       font-size: 12px;
     }

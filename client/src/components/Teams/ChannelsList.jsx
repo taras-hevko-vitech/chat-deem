@@ -1,7 +1,7 @@
 import React from "react";
 import plusIcon from "../../assets/images/icon-add.png";
 
-function ChannelsList({ props }) {
+function ChannelsList() {
     const channelsList = [
         {
             title: "#app-idea",

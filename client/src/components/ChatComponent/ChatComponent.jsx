@@ -8,17 +8,20 @@ import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import { GET_MESSAGES, NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "../../state/atoms";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
-function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
+function ChatComponent() {
+    const messagesEndRef = useRef(null);
+    const {width} = useWindowDimensions()
     const [chatMessages, setChatMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [showUploadMenu, setShowUploadMenu] = useState(false);
+
     const [auth] = useRecoilState(authState);
     const [chatId] = useRecoilState(selectedChatId);
-
     const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
-    const { data: onData } = useSubscription(
+    const { data } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
         { variables: { receiverId: chatId },
                 onSubscriptionData({subscriptionData: { data}}) {
@@ -30,7 +33,6 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
                 }
         });
 
-    const messagesEndRef = useRef(null);
     useEffect(() => {
         scrollToBottom();
     }, [chatMessages]);
@@ -60,10 +62,12 @@ function ChatComponent({ isTablet, isMobile, isSmallMobile }) {
         });
         setMessage("");
     };
-    console.log(chatMessages);
+
+    const isTablet = width < 1100
+
     return (
         <div className="chat-component">
-            {isTablet && <ProfileInformation isMobile={isMobile} isTablet={isTablet} isSmallMobile={isSmallMobile} />}
+            {isTablet && <ProfileInformation />}
             <div className="chat-messages">
                 {chatMessages.map((mess, i) => (
                     mess &&
