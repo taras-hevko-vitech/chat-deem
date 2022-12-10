@@ -72,6 +72,9 @@
       height: 100%;
       margin-right: 20px;
     }
+    .typing-area:focus {
+      border-bottom: 1px #181c20 solid;
+    }
 
     button {
       border: none;
@@ -86,5 +89,8 @@
       color: #25c14a;
       cursor: pointer;
     }
+  }
+  textarea:focus, input:focus{
+    outline: none;
   }
 }

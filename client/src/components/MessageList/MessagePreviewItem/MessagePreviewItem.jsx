@@ -6,15 +6,17 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import { selectedChatId } from "../../../state/atoms";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
-function MessagePreviewItem({ previewData, isMobile }) {
+function MessagePreviewItem({ previewData }) {
+    const {width} = useWindowDimensions()
     const navigate = useNavigate();
     const [chatId, setChatId] = useRecoilState(selectedChatId);
 
     const {
-        firstName,
-        id = previewData.id,
-        lastName,
+        firstName = "Unknown",
+        id,
+        lastName = "Unknown",
         photoURL = "https://picsum.photos/seed/picsum/200/300",
         onlineStatus,
         lastMessageText = "It is to early to provide some kind of estimation here. We need user stories.",
@@ -28,6 +30,7 @@ function MessagePreviewItem({ previewData, isMobile }) {
     });
 
     const selectChat = (id) => {
+        const isMobile = width < 960;
         if (isMobile) {
             navigate("/chat");
         }

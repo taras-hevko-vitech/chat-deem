@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Navigation.scss";
 
-function Navigation({ props }) {
+function Navigation() {
     const [burgerOpen, setBurgerOpen] = useState(false);
 
     return (

@@ -7,8 +7,10 @@ import { useRecoilState } from "recoil";
 import { selectedChatId } from "../../state/atoms";
 import { useLazyQuery } from "@apollo/client";
 import { GET_USER_BY_ID } from "../../graphql/user";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
-function ProfileInformation({ isTablet, isSmallMobile }) {
+function ProfileInformation() {
+    const {width} = useWindowDimensions()
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [profile, setProfile] = useState({
         email: "",
@@ -35,6 +37,10 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
         });
         setProfile(user.data.getUserById);
     };
+
+    const isSmallMobile = width < 686;
+    const isTablet = width < 1100
+
     if (isTablet) {
         return (
             <>
@@ -43,7 +49,7 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
                         {isSmallMobile && <FontAwesomeIcon icon={faChevronLeft} onClick={() => navigate("/")} />}
                         <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />
                         <div>
-                            <div className="user-name">Rachel Curtis</div>
+                            <div className="user-name">{`${profile.firstName} ${profile.lastName}`}</div>
                             <div className="online-status">online</div>
                         </div>
                     </div>
@@ -59,11 +65,8 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
                         <div className="title">Profile Information</div>
                         <div className="profile-link">Show full profile</div>
                         <div className="block-info">
-                            <div>Email: {"user.email"}</div>
-                            <div>Phone number: {"user.phoneNo"}</div>
-                            <div>Date of birth: January 20, 1990</div>
-                            <div>Gender: Female</div>
-                            <div>Languages: English, French</div>
+                            <div>Email: {profile.email}</div>
+                            <div>Phone number: {profile.phoneNo}</div>
                         </div>
                     </div>
                 )}
@@ -75,7 +78,6 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
                 <div className="main-info">
                     <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />
                     <div className="user-name">{`${profile.firstName} ${profile.lastName}`}</div>
-                    <div className="user-address">New York, USA</div>
                 </div>
                 <div className="additional-information">
                     <div className="block-info">
@@ -85,12 +87,6 @@ function ProfileInformation({ isTablet, isSmallMobile }) {
                         <div>{profile.phoneNo}</div>
                     </div>
                     <div className="block-info">
-                        <div>Date of birth</div>
-                        <div>January 20, 1990</div>
-                        <div>Gender</div>
-                        <div>Female</div>
-                        <div>Languages</div>
-                        <div>English, French</div>
                         <div className="profile-link">Show full profile</div>
                     </div>
                 </div>

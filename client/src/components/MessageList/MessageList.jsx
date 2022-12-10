@@ -7,12 +7,15 @@ import Teams from "../Teams/Teams";
 import classNames from "classnames";
 import { useLazyQuery } from "@apollo/client";
 import { GET_USERS } from "../../graphql/user";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
-function MessageList({ isMobile }) {
+function MessageList() {
+    const {width} = useWindowDimensions()
     const [searchValue, setSearchValue] = useState("");
     const [showChannelList, setShowChannelList] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
+
     const [allUsersQuery] = useLazyQuery(GET_USERS);
 
     const getAllUsers = async () => {
@@ -55,6 +58,8 @@ function MessageList({ isMobile }) {
             getAllUsers();
         }
     };
+    const isMobile = width < 960;
+
     return (
         <div className="message-list">
             {showChannelList && isMobile &&
@@ -72,8 +77,13 @@ function MessageList({ isMobile }) {
                         <div className="search-icon">
                             <FontAwesomeIcon icon={faSearch} onClick={() => setShowSearchInput(!showSearchInput)} />
                         </div>
-                        <input type="text" className="search-input" placeholder="Search" value={searchValue}
-                               onChange={e => setSearchValue(e.target.value.toLowerCase())} onKeyDown={handleKeyDown} />
+                        <input
+                            type="text"
+                            className="search-input"
+                            placeholder="Search"
+                            value={searchValue}
+                            onChange={e => setSearchValue(e.target.value.toLowerCase())} onKeyDown={handleKeyDown}
+                        />
                     </div>
                 </div>
                 <div className="message-tabs">
@@ -84,7 +94,7 @@ function MessageList({ isMobile }) {
             </div>
             <div className="chat-list">
                 {allUsers.map((chat, i) => (
-                    <MessagePreviewItem key={i} previewData={chat} isMobile={isMobile} />
+                    <MessagePreviewItem key={i} previewData={chat} />
                 ))}
             </div>
         </div>

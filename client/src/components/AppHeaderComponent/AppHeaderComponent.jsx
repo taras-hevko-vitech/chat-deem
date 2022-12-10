@@ -4,7 +4,7 @@ import Navigation from "./Navigation/Navigation";
 import Notification from "./Notifications/Notification";
 import ProfileMenu from "./ProfileMenu/ProfileMenu";
 
-function AppHeaderComponent({ props }) {
+function AppHeaderComponent() {
     return (
         <div className="app-header">
             <div className="container">

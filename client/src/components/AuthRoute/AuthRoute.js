@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { useLazyQuery } from "@apollo/client";
 import { USER_AUTH } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
-
+import SimpleLoader from "../SimpleLoader/SimpleLoader";
 
 function AuthRoute({ children, authenticated, guest }) {
+    const [showLoader, setShownLoader] = useState(false)
     const [userAuthQuery] = useLazyQuery(USER_AUTH);
     const [auth, setAuth] = useRecoilState(authState);
 
     const userAuth = async () => {
+        setShownLoader(true)
         const response = await userAuthQuery();
         if (response.data.userAuth) {
             setAuth(response.data.userAuth);
         }
+        setShownLoader(false)
     };
 
     useEffect(() => {
@@ -24,6 +27,9 @@ function AuthRoute({ children, authenticated, guest }) {
         }
     }, []);
 
+    if (showLoader) {
+        return <SimpleLoader />
+    }
     if (!auth && authenticated) {
         return <Navigate to="/login" />;
     } else if (guest && auth) {
@@ -31,6 +37,7 @@ function AuthRoute({ children, authenticated, guest }) {
     } else {
         return children;
     }
+
 }
 
 export default AuthRoute;

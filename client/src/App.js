@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.scss";
 import Layout from "./Layout";
-import { useRecoilState } from "recoil";
-import { authState } from "./state/atoms";
 
 function App() {
     return (

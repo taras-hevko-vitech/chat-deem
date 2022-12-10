@@ -4,7 +4,7 @@ import userIcon from "../../../assets/images/user-icon.svg";
 import { useRecoilState } from "recoil";
 import { authState } from "../../../state/atoms";
 
-function ProfileMenu({ props }) {
+function ProfileMenu() {
     const [showMenu, setShowMenu] = useState(false);
     const [auth, setAuth] = useRecoilState(authState);
 

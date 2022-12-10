@@ -9,6 +9,14 @@ const MESSAGE_FIELDS = gql`
     }
 `;
 
+export const GET_MESSAGES = gql`
+    ${MESSAGE_FIELDS}
+    query  ($receiverId: String!) {
+      messageByUser(receiverId: $receiverId) {
+        ...messageFields
+      }
+    }   
+`;
 
 export const SEND_MESSAGE = gql`
     ${MESSAGE_FIELDS}
@@ -25,15 +33,6 @@ export const SEND_MESSAGE = gql`
         ...messageFields
       }
     }
-`;
-
-export const GET_MESSAGES = gql`
-    ${MESSAGE_FIELDS}
-    query  ($receiverId: String!) {
-      messageByUser(receiverId: $receiverId) {
-        ...messageFields
-      }
-    }   
 `;
 
 export const NEW_MESSAGE_SUBSCRIBE = gql`
