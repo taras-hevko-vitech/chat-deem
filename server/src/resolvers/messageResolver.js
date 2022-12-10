@@ -2,6 +2,7 @@ const { Message } = require("../models/Message");
 const { PubSub, withFilter } = require("graphql-subscriptions");
 
 const MESSAGE_ADDED = "newMessage"
+const USER_TYPING = "userTyping"
 const pubsub = new PubSub()
 
 const Query = {
@@ -33,12 +34,10 @@ const Mutation = {
         return userText
     },
 
-    userTyping: async (_, { email, receiverId }) => {
-        await pubsub.publish("userTyping", {
-            userTyping: email,
-            receiverId,
-        })
-        return true
+    userTyping: async (_, { receiverId }, {context}) => {
+        const { user } = context
+        await pubsub.publish(USER_TYPING, { userTyping: user.id, receiverId });
+        return true;
     },
     updateMessage: async (_, { id, content }) => {
         const userText = await Message.findOneAndUpdate(
@@ -60,14 +59,7 @@ const Subscription = {
     },
 
     userTyping: {
-        subscribe: withFilter(
-            () => pubsub.asyncIterator("userTyping"),
-            (payload, variables) => {
-                return (
-                    payload.receiverId === variables.receiverId
-                )
-            }
-        ),
+        subscribe: () => pubsub.asyncIterator(USER_TYPING),
     },
 };
 

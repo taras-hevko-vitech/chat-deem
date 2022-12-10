@@ -10,7 +10,7 @@ const typeDefs = gql`
     }
     type Mutation {
         userSignUp(input: UserSignUpInput!): User
-        userTyping(username: String! receiverId: String!): Boolean!
+        userTyping(receiverId: String!): Boolean!
         sendMessage(receiverId: String! content: String! timestamp: Float!): Message!
         updateMessage(id: ID! content: String!): Message!
         deleteMessage(id: ID!): Boolean!
