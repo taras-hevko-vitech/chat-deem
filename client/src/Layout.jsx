@@ -9,10 +9,12 @@ import AuthRoute from "./components/AuthRoute/AuthRoute";
 import AuthPage from "./pages/AuthPage";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 import { useRecoilState } from "recoil";
-import { authState } from "./state/atoms";
+import { authState, selectedChatId } from "./state/atoms";
+import SelectChatBanner from "./components/SelectChatBanner/SelectChatBanner";
 
 function Layout() {
     const [auth] = useRecoilState(authState)
+    const [chatID] = useRecoilState(selectedChatId)
     const {width} = useWindowDimensions()
 
     const isSmallMobile = width < 686;
@@ -48,8 +50,14 @@ function Layout() {
                         <div className="main">
                             <Teams />
                             <MessageList />
-                            {!isTablet && <ProfileInformation />}
-                            <ChatComponent />
+                            {chatID ? (
+                                <>
+                                    {!isTablet && <ProfileInformation />}
+                                    <ChatComponent />
+                                </>
+                            ) : (
+                                <SelectChatBanner />
+                            )}
                         </div>
                     </AuthRoute>
                 } />

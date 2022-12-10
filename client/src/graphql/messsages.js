@@ -35,6 +35,12 @@ export const SEND_MESSAGE = gql`
     }
 `;
 
+export const USER_TYPING = gql`
+  mutation userTyping($receiverId: String!) {
+     userTyping(receiverId: $receiverId)
+  }
+`;
+
 export const NEW_MESSAGE_SUBSCRIBE = gql`
     subscription($receiverId: String!) {
       newMessage(receiverId: $receiverId) {
@@ -50,3 +56,9 @@ export const NEW_MESSAGE_SUBSCRIBE = gql`
       }
     }
 `;
+
+export const USER_TYPING_SUBSCRIBE = gql`
+    subscription($receiverId: String!) {
+        userTyping(receiverId: $receiverId) 
+    }
+`

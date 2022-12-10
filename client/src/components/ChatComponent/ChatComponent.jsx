@@ -5,7 +5,13 @@ import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import MessageComponent from "./MessageComponent/MessageComponent";
 import ProfileInformation from "../ProfileInformation/ProfileInformation";
 import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
-import { GET_MESSAGES, NEW_MESSAGE_SUBSCRIBE, SEND_MESSAGE } from "../../graphql/messsages";
+import {
+    GET_MESSAGES,
+    NEW_MESSAGE_SUBSCRIBE,
+    SEND_MESSAGE,
+    USER_TYPING,
+    USER_TYPING_SUBSCRIBE
+} from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "../../state/atoms";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
@@ -21,6 +27,7 @@ function ChatComponent() {
     const [chatId] = useRecoilState(selectedChatId);
     const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
+    const [userTyping] = useMutation(USER_TYPING)
     const { data } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
         { variables: { receiverId: chatId },
@@ -63,6 +70,15 @@ function ChatComponent() {
         setMessage("");
     };
 
+    const handleMessageChange = async (e) => {
+        setMessage(e.target.value)
+        await userTyping({
+            variables: {
+                receiverId: chatId,
+            }
+        })
+    }
+
     const isTablet = width < 1100
 
     return (
@@ -90,7 +106,7 @@ function ChatComponent() {
                     type="text"
                     className="typing-area"
                     placeholder="Type your message…"
-                    onChange={e => setMessage(e.target.value)}
+                    onChange={handleMessageChange}
                     value={message}
                 />
                 <button type="submit">SEND</button>
