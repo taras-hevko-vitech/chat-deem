@@ -60,13 +60,15 @@ function ChatComponent() {
 
     const onSend = async (e) => {
         e.preventDefault();
-        await sendMessageMutation({
-            variables: {
-                receiverId: chatId,
-                content: message,
-                timestamp: 321341324321431
-            }
-        });
+        if (message.trim().length > 0) {
+            await sendMessageMutation({
+                variables: {
+                    receiverId: chatId,
+                    content: message,
+                    timestamp: 321341324321431
+                }
+            });
+        }
         setMessage("");
     };
 

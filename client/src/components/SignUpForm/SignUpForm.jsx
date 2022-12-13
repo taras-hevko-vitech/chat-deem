@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./SignUpForm.scss";
-import { useMutation } from "@apollo/client";
-import { USER_SIGNUP } from "../../graphql/user";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { LOGIN, USER_SIGNUP } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
 
@@ -15,6 +15,7 @@ function SignUpForm() {
     });
 
     const [userSignUpMutation] = useMutation(USER_SIGNUP);
+    const [loginQuery] = useLazyQuery(LOGIN);
     const [auth, setAuth] = useRecoilState(authState);
 
     const onSubmit = (event) => {
@@ -33,10 +34,20 @@ function SignUpForm() {
     };
 
     const userSignUp = async (input) => {
-        const response = await userSignUpMutation({
+        await userSignUpMutation({
             variables: { input }
         });
-        setAuth(response.data.userSignUp);
+        await userLogin()
+    };
+
+    const userLogin = async () => {
+        const response = await loginQuery({
+            variables: { email: formValues.email, password: formValues.password }
+        });
+        if (response.data.login.token) {
+            localStorage.setItem("token", response.data.login.token);
+            setAuth(response.data.login.user);
+        }
     };
 
     const handleChangeInput = (event) => {
