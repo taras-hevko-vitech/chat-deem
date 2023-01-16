@@ -6,11 +6,12 @@ import ChatComponent from "./components/ChatComponent/ChatComponent";
 import ProfileInformation from "./components/ProfileInformation/ProfileInformation";
 import { Navigate, Route, Routes } from "react-router";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
-import AuthPage from "./pages/AuthPage";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "./state/atoms";
 import SelectChatBanner from "./components/SelectChatBanner/SelectChatBanner";
+import Login from "./components/Login/Login";
+import SignUpForm from "./components/SignUpForm/SignUpForm";
 
 function Layout() {
     const [auth] = useRecoilState(authState)
@@ -26,7 +27,10 @@ function Layout() {
                 {auth && <AppHeaderComponent />}
                 <Routes>
                     <Route exact path="/login" element={<AuthRoute guest>
-                        <AuthPage />
+                        <Login />
+                    </AuthRoute>} />
+                    <Route exact path="/sign-up" element={<AuthRoute guest>
+                        <SignUpForm />
                     </AuthRoute>} />
                     <Route exact path="/chat-deem" element={<AuthRoute authenticated>
                         <MessageList />
@@ -42,7 +46,10 @@ function Layout() {
     return (
             <Routes>
                 <Route exact path="/login" element={<AuthRoute guest>
-                    <AuthPage />
+                    <Login />
+                </AuthRoute>} />
+                <Route exact path="/sign-up" element={<AuthRoute guest>
+                    <SignUpForm />
                 </AuthRoute>} />
                 <Route path="/chat-deem" element={
                     <AuthRoute authenticated>

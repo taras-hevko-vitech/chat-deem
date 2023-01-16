@@ -4,8 +4,10 @@ import { authState } from "../../state/atoms";
 import { useRecoilState } from "recoil";
 import { LOGIN } from "../../graphql/user";
 import { useLazyQuery } from "@apollo/client";
+import { useNavigate } from "react-router";
 
 function Login() {
+    const navigate = useNavigate()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -29,6 +31,7 @@ function Login() {
 
     return (
         <div className="login">
+            <button className="switcher" onClick={() => navigate("/sign-up")}>Sign Up</button>
             <form onSubmit={onSubmit}>
                 <label className="form__label">
                     Email
