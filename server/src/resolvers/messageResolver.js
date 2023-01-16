@@ -55,7 +55,14 @@ const Mutation = {
 };
 const Subscription = {
     newMessage: {
-        subscribe: () => pubsub.asyncIterator(MESSAGE_ADDED),
+        subscribe: withFilter(
+            () => pubsub.asyncIterator(MESSAGE_ADDED),
+            (payload, variables = {}) => {
+                const isAuthUserSenderOrReceiver = payload.newMessage.receiverId === variables.receiverId && payload.newMessage.senderId === variables.authId
+                const isUserSenderOrReceiver = payload.newMessage.receiverId === variables.authId && payload.newMessage.senderId === variables.receiverId
+                return isAuthUserSenderOrReceiver || isUserSenderOrReceiver
+            }
+        )
     },
 
     userTyping: {
