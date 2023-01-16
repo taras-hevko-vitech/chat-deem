@@ -16,7 +16,7 @@ const typeDefs = gql`
         deleteMessage(id: ID!): Boolean!
     }
     type Subscription {
-        newMessage(receiverId: String!): Message
+        newMessage(receiverId: String! authId: String!): Message
         newUser: User
         userTyping (receiverId: String!): String
     }

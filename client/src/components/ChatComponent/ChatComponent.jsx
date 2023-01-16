@@ -8,9 +8,7 @@ import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import {
     GET_MESSAGES,
     NEW_MESSAGE_SUBSCRIBE,
-    SEND_MESSAGE,
-    USER_TYPING,
-    USER_TYPING_SUBSCRIBE
+    SEND_MESSAGE
 } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "../../state/atoms";
@@ -27,17 +25,12 @@ function ChatComponent() {
     const [chatId] = useRecoilState(selectedChatId);
     const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
-    const [userTyping] = useMutation(USER_TYPING)
     const { data } = useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
-        { variables: { receiverId: chatId },
-                onSubscriptionData({subscriptionData: { data}}) {
-                    if ((data.newMessage.receiverId === chatId && data.newMessage.senderId === auth.id) ||
-                        (data.newMessage.receiverId === auth.id && data.newMessage.senderId === chatId)
-                    ) {
-                        setChatMessages([...chatMessages, data.newMessage])
-                    }
-                }
+        { variables: { receiverId: chatId, authId: auth.id },
+            onSubscriptionData({subscriptionData: { data}}) {
+                setChatMessages([...chatMessages, data.newMessage])
+            }
         });
 
     useEffect(() => {
@@ -74,11 +67,6 @@ function ChatComponent() {
 
     const handleMessageChange = async (e) => {
         setMessage(e.target.value)
-        await userTyping({
-            variables: {
-                receiverId: chatId,
-            }
-        })
     }
 
     const isTablet = width < 1100
