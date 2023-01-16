@@ -4,8 +4,10 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { LOGIN, USER_SIGNUP } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
+import { useNavigate } from "react-router";
 
 function SignUpForm() {
+    const navigate = useNavigate()
     const [formValues, setFormValues] = useState({
         firstName: "",
         lastName: "",
@@ -67,6 +69,7 @@ function SignUpForm() {
     };
     return (
         <div className="sign-up">
+            <button className="switcher" onClick={() => navigate("/login")}>Login</button>
             <form onSubmit={onSubmit}>
                 <label className="form__label">
                     First Name
