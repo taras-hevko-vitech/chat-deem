@@ -17,7 +17,7 @@ function MessageComponent({
     return (
         <div className="message-container" style={{ alignItems: isMyMessage ? "flex-end" : "flex-start" }}>
             <div className="message">
-                {!isMyMessage && <img src={image} alt="" className="avatar" />}
+                {!isMyMessage && <img src="https://picsum.photos/seed/picsum/200/300" alt="" className="avatar" />}
                 <div className={messageStyles}>{message}</div>
                 {isMyMessage && <img src={image} alt="" className="avatar" />}
             </div>

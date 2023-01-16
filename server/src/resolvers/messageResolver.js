@@ -58,15 +58,20 @@ const Subscription = {
         subscribe: withFilter(
             () => pubsub.asyncIterator(MESSAGE_ADDED),
             (payload, variables = {}) => {
-                const isAuthUserSenderOrReceiver = payload.newMessage.receiverId === variables.receiverId && payload.newMessage.senderId === variables.authId
-                const isUserSenderOrReceiver = payload.newMessage.receiverId === variables.authId && payload.newMessage.senderId === variables.receiverId
-                return isAuthUserSenderOrReceiver || isUserSenderOrReceiver
+                const isAuthUserSender = payload.newMessage.receiverId === variables.receiverId && payload.newMessage.senderId === variables.authId
+                const isUserReceiver = payload.newMessage.receiverId === variables.authId && payload.newMessage.senderId === variables.receiverId
+                return isUserReceiver || isAuthUserSender
             }
         )
     },
 
     userTyping: {
-        subscribe: () => pubsub.asyncIterator(USER_TYPING),
+        subscribe: withFilter(
+            () => pubsub.asyncIterator(USER_TYPING),
+            (payload, variables) => {
+                return payload.receiverId === variables.receiverId;
+            }
+        )
     },
 };
 

@@ -8,34 +8,50 @@ import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import {
     GET_MESSAGES,
     NEW_MESSAGE_SUBSCRIBE,
-    SEND_MESSAGE
+    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE
 } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "../../state/atoms";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import Typing from "../Typing/Typing";
 
 function ChatComponent() {
     const messagesEndRef = useRef(null);
+
     const {width} = useWindowDimensions()
     const [chatMessages, setChatMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [showUploadMenu, setShowUploadMenu] = useState(false);
+    const [userTyping, setUserTyping] = useState(null)
 
     const [auth] = useRecoilState(authState);
     const [chatId] = useRecoilState(selectedChatId);
     const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
-    const { data } = useSubscription(
+    const [userTypingMutation] = useMutation(USER_TYPING)
+
+    useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
         { variables: { receiverId: chatId, authId: auth.id },
             onSubscriptionData({subscriptionData: { data}}) {
+                setUserTyping(null)
                 setChatMessages([...chatMessages, data.newMessage])
             }
         });
+    useSubscription(
+        USER_TYPING_SUBSCRIBE,
+        { variables: { receiverId: auth.id },
+            onSubscriptionData({ subscriptionData: { data } }) {
+                if (data.userTyping) {
+                    setUserTyping(data.userTyping)
+                }
+            }
+        });
+
 
     useEffect(() => {
         scrollToBottom();
-    }, [chatMessages]);
+    }, [chatMessages, userTyping]);
 
     useEffect(() => {
         const getMessages = async () => {
@@ -44,7 +60,7 @@ function ChatComponent() {
             });
             setChatMessages([...messages.data.messageByUser]);
         };
-        chatId && getMessages();
+        chatId && getMessages() && setUserTyping(null)
     }, [chatId]);
 
     const scrollToBottom = () => {
@@ -67,6 +83,11 @@ function ChatComponent() {
 
     const handleMessageChange = async (e) => {
         setMessage(e.target.value)
+        await userTypingMutation({
+            variables: {
+                receiverId: chatId
+            }
+        })
     }
 
     const isTablet = width < 1100
@@ -84,6 +105,7 @@ function ChatComponent() {
                         date={mess.timestamp}
                     />
                 ))}
+                {userTyping === chatId && <Typing />}
                 <div ref={messagesEndRef} />
             </div>
             <form className="chat-footer" onSubmit={onSend}>
