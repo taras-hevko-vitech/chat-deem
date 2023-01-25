@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignUpForm.scss";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { LOGIN, USER_SIGNUP } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
 import { useNavigate } from "react-router";
+import { useToast } from "../Toast/useToast";
+import { TOAST_TYPE } from "../../helper/Constans";
 
 function SignUpForm() {
+    const toast = useToast()
     const navigate = useNavigate()
     const [formValues, setFormValues] = useState({
         firstName: "",
@@ -16,9 +19,15 @@ function SignUpForm() {
         phoneNo: ""
     });
 
-    const [userSignUpMutation] = useMutation(USER_SIGNUP);
+    const [userSignUpMutation, {error}] = useMutation(USER_SIGNUP);
     const [loginQuery] = useLazyQuery(LOGIN);
     const [auth, setAuth] = useRecoilState(authState);
+
+    useEffect(() => {
+        if (error) {
+            toast.open(error.message, TOAST_TYPE.error, 5000)
+        }
+    }, [error])
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -30,9 +39,7 @@ function SignUpForm() {
                 password: "",
                 phoneNo: ""
             });
-        }).catch((e) => {
-            console.log(e);
-        });
+        })
     };
 
     const userSignUp = async (input) => {
@@ -49,6 +56,8 @@ function SignUpForm() {
         if (response.data.login.token) {
             localStorage.setItem("token", response.data.login.token);
             setAuth(response.data.login.user);
+            toast.closeAll()
+            toast.open("You are in", TOAST_TYPE.success, 2000)
         }
     };
 

@@ -14,8 +14,11 @@ import { useRecoilState } from "recoil";
 import { authState, selectedChatId } from "../../state/atoms";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import Typing from "../Typing/Typing";
+import { useToast } from "../Toast/useToast";
+import { TOAST_TYPE } from "../../helper/Constans";
 
 function ChatComponent() {
+    const toast = useToast()
     const messagesEndRef = useRef(null);
 
     const {width} = useWindowDimensions()
@@ -33,8 +36,12 @@ function ChatComponent() {
     useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
         { variables: { receiverId: chatId, authId: auth.id },
-            onSubscriptionData({subscriptionData: { data}}) {
+            onSubscriptionData({ subscriptionData: { data}}) {
                 setUserTyping(null)
+                if (data?.newMessage?.receiverId === auth.id) {
+                    // todo CHANGE THIS DEU TO CHAT ROOMS
+                    toast.open("YOU get NEW MESSAGE", TOAST_TYPE.success, 3000)
+                }
                 setChatMessages([...chatMessages, data.newMessage])
             }
         });

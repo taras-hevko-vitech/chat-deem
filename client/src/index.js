@@ -5,16 +5,19 @@ import { client } from "./graphql/ApolloClient";
 import App from "./App";
 import { ApolloProvider } from "@apollo/client";
 import { RecoilRoot } from "recoil";
+import { ToastProvider } from "./components/Toast/ToastContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        <ApolloProvider client={client}>
-            <RecoilRoot>
-                <BrowserRouter>
-                    <App />
-                </BrowserRouter>
-            </RecoilRoot>
-        </ApolloProvider>
+        <ToastProvider>
+            <ApolloProvider client={client}>
+                <RecoilRoot>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </RecoilRoot>
+            </ApolloProvider>
+        </ToastProvider>
     </React.StrictMode>
 );

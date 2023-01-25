@@ -18,6 +18,7 @@ const typeDefs = gql`
     type Subscription {
         newMessage(receiverId: String! authId: String!): Message
         newUser: User
+        isUserOnline(authUserId: ID!, userId: ID!): IsUserOnlinePayload
         userTyping (receiverId: String!): String
     }
     
@@ -43,6 +44,10 @@ const typeDefs = gql`
     type LoginPayload {
         user: User!
         token: String!
+    }
+    type IsUserOnlinePayload {
+        userId: ID!
+        isOnline: Boolean
     }
     
     input UserSignUpInput {

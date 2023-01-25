@@ -57,3 +57,13 @@ export const GET_USER_BY_ID = gql`
         }
     }
 `;
+
+
+export const USER_ONLINE_SUBSCRIPTION = gql`
+    subscription Subscription($authUserId: ID!, $userId: ID!) {
+      isUserOnline(authUserId: $authUserId, userId: $userId) {
+        isOnline
+        userId
+      }
+    }
+`
