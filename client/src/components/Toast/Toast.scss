@@ -1,0 +1,41 @@
+.toasts-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.toast {
+  border: 2px solid transparent;
+  background-color: #fafafa;
+  border-radius: 4px;
+  max-width: 480px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, .2);
+  margin-top: 8px;
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+}
+
+.toast__text {
+  padding: 8px 12px;
+  line-height: 1.4;
+}
+
+.toast__close-btn {
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  margin-top: 8px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.success {
+  background-color: #52a657;
+}
+
+.error {
+  background-color: #ef4840;
+}

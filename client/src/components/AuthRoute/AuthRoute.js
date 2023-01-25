@@ -5,10 +5,13 @@ import { USER_AUTH } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
 import SimpleLoader from "../SimpleLoader/SimpleLoader";
+import { TOAST_TYPE } from "../../helper/Constans";
+import { useToast } from "../Toast/useToast";
 
 function AuthRoute({ children, authenticated, guest }) {
+    const toast = useToast()
     const [showLoader, setShownLoader] = useState(false)
-    const [userAuthQuery] = useLazyQuery(USER_AUTH);
+    const [userAuthQuery, {error}] = useLazyQuery(USER_AUTH);
     const [auth, setAuth] = useRecoilState(authState);
 
     const userAuth = async () => {

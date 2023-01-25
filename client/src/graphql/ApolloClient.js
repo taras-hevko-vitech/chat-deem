@@ -37,9 +37,11 @@ export const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: splitLink,
     defaultOptions: {
-        watchQuery: {
-            fetchPolicy: "no-cache",
-            errorPolicy: "ignore"
-        }
-    }
+        query: {
+            errorPolicy: 'all',
+        },
+        mutate: {
+            errorPolicy: 'all',
+        },
+    },
 });
