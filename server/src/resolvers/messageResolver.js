@@ -1,42 +1,57 @@
 const { Message } = require("../models/Message");
+const { Chat } = require("../models/Chat");
 const { PubSub, withFilter } = require("graphql-subscriptions");
+const { GraphQLError } = require("graphql");
 
-const MESSAGE_ADDED = "newMessage"
-const USER_TYPING = "userTyping"
-const pubsub = new PubSub()
+const MESSAGE_ADDED = "newMessage";
+const USER_TYPING = "userTyping";
+const pubsub = new PubSub();
 
 const Query = {
-    messageByUser: async (_, {receiverId}, {context}) => {
-        const { user } = context
-        if (!user) throw new Error("You have to log in")
-        const messages = await Message.find({$or: [
-            {senderId: receiverId, receiverId: user.id},
-            {senderId: user.id, receiverId: receiverId}
-        ]})
-        return messages
-
+    messageByUser: async (_, { receiverId }, { context }) => {
+        const { user } = context;
+        if (!user) throw new Error("You have to log in");
+        const createdChatBefore = await Chat.findOne({ users: {$all: [user.id, receiverId] } });
+        if (createdChatBefore) {
+            const messages = await Message.find({ chatId: createdChatBefore.id });
+            return messages;
+        } else {
+            return []
+        }
     }
 };
 const Mutation = {
-    sendMessage: async (_, args, {context}) => {
-        const { user } = context
-        const { receiverId, content, timestamp} = args
-        const userText = new Message({
+    sendMessage: async (_, args, { context }) => {
+        const { user } = context;
+        const { chatId, content, timestamp } = args;
+
+        const newMessage = new Message({
             senderId: user.id,
-            receiverId,
+            chatId: chatId,
             content,
-            timestamp,
-        })
-        await userText.save()
+            timestamp
+        });
+        await newMessage.save();
+
         await pubsub.publish(MESSAGE_ADDED, {
-            newMessage: userText
-        })
-        return userText
+            newMessage: newMessage
+        });
+        return newMessage;
     },
 
-    userTyping: async (_, { receiverId }, {context}) => {
-        const { user } = context
-        await pubsub.publish(USER_TYPING, { userTyping: user.id, receiverId });
+    createNewChat: async (_, { receiverId }, { context }) => {
+        const { user } = context;
+        const newChat = new Chat({
+            users: [user.id, receiverId]
+        });
+        await newChat.save();
+
+        return newChat;
+    },
+
+    userTyping: async (_, { chatId }, { context }) => {
+        const { user } = context;
+        await pubsub.publish(USER_TYPING, { userTyping: user.id, chatId });
         return true;
     },
     updateMessage: async (_, { id, content }) => {
@@ -44,23 +59,21 @@ const Mutation = {
             { _id: id },
             { content },
             { new: true }
-        )
-        return userText
+        );
+        return userText;
     },
 
     deleteMessage: async (_, { id }) => {
-        await Message.findOneAndDelete({ _id: id })
-        return true
-    },
+        await Message.findOneAndDelete({ _id: id });
+        return true;
+    }
 };
 const Subscription = {
     newMessage: {
         subscribe: withFilter(
             () => pubsub.asyncIterator(MESSAGE_ADDED),
             (payload, variables = {}) => {
-                const isAuthUserSender = payload.newMessage.receiverId === variables.receiverId && payload.newMessage.senderId === variables.authId
-                const isUserReceiver = payload.newMessage.receiverId === variables.authId && payload.newMessage.senderId === variables.receiverId
-                return isUserReceiver || isAuthUserSender
+                return payload.newMessage.chatId === variables.chatId;
             }
         )
     },
@@ -69,16 +82,16 @@ const Subscription = {
         subscribe: withFilter(
             () => pubsub.asyncIterator(USER_TYPING),
             (payload, variables) => {
-                return payload.receiverId === variables.receiverId;
+                return payload.chatId === variables.chatId;
             }
         )
-    },
+    }
 };
 
 const resolvers = {
     Query,
     Mutation,
     Subscription
-}
+};
 
 module.exports = resolvers;

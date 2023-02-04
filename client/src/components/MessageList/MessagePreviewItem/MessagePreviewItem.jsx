@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { selectedChatId } from "../../../state/atoms";
+import { selectedChatId, selectedUserId } from "../../../state/atoms";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 function MessagePreviewItem({ previewData }) {
     const {width} = useWindowDimensions()
     const navigate = useNavigate();
-    const [chatId, setChatId] = useRecoilState(selectedChatId);
+    const [_, setChatId] = useRecoilState(selectedChatId)
+    const [__, setUserId] = useRecoilState(selectedUserId);
 
     const {
         firstName = "Unknown",
@@ -30,11 +31,12 @@ function MessagePreviewItem({ previewData }) {
     });
 
     const selectChat = (id) => {
+        setChatId(null)
         const isMobile = width < 960;
         if (isMobile) {
             navigate("/chat");
         }
-        setChatId(id);
+        setUserId(id);
     };
 
     return (

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronLeft, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { selectedChatId } from "../../state/atoms";
+import { selectedChatId, selectedUserId } from "../../state/atoms";
 import { useLazyQuery } from "@apollo/client";
 import { GET_USER_BY_ID } from "../../graphql/user";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
@@ -19,20 +19,20 @@ function ProfileInformation() {
         lastName: "",
         phoneNo: ""
     });
-    const [chatId] = useRecoilState(selectedChatId);
+    const [userId] = useRecoilState(selectedUserId);
     const [getUserQuery] = useLazyQuery(GET_USER_BY_ID);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (chatId) {
+        if (userId) {
             getUserById();
         }
-    }, [chatId]);
+    }, [userId]);
 
     const getUserById = async () => {
         const user = await getUserQuery({
             variables: {
-                id: chatId
+                id: userId
             }
         });
         setProfile(user.data.getUserById);

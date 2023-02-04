@@ -21,7 +21,7 @@ const httpServer = http.createServer(app);
 
 const PORT = process.env.PORT || 4003;
 
-mongoose.connect(`mongodb+srv://mostwanter:${process.env.DB_PASSWORD}@cluster0.tt5lljq.mongodb.net/?retryWrites=true&w=majority`);
+mongoose.connect(`mongodb+srv://mostwanter:${process.env.DB_PASSWORD}@cluster0.tt5lljq.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true });
 
 const wsServer = new WebSocketServer({
     server: httpServer,
@@ -44,7 +44,7 @@ const server = new ApolloServer({
 });
 
 (async () => {
-    useServer({ schema }, wsServer)
+    useServer({ schema }, wsServer);
     await server.start();
     server.applyMiddleware({ app });
     httpServer.listen({ port: PORT }, () => {

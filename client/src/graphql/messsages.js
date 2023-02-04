@@ -3,30 +3,46 @@ import { gql } from "@apollo/client";
 const MESSAGE_FIELDS = gql`
     fragment messageFields on Message {
         senderId
-        receiverId
+        chatId
         content
         timestamp
     }
 `;
 
+const CHAT_FIELDS = gql`
+    fragment chatFields on Chat {
+        id
+        users
+    }
+`;
+
 export const GET_MESSAGES = gql`
     ${MESSAGE_FIELDS}
-    query  ($receiverId: String!) {
+    query ($receiverId: String!) {
       messageByUser(receiverId: $receiverId) {
         ...messageFields
       }
     }   
 `;
 
+export const CREATE_NEW_CHAT = gql`
+${CHAT_FIELDS}
+    mutation createNewChat($receiverId: String!) {
+      createNewChat(receiverId: $receiverId) {
+        ...chatFields
+    }
+ }
+`;
+
 export const SEND_MESSAGE = gql`
     ${MESSAGE_FIELDS}
     mutation sendMessage(
-      $receiverId: String!
+      $chatId: String!
       $content: String!
       $timestamp: Float!
     ) {
       sendMessage(
-        receiverId: $receiverId
+        chatId: $chatId
         content: $content
         timestamp: $timestamp
       ) {
@@ -36,29 +52,22 @@ export const SEND_MESSAGE = gql`
 `;
 
 export const USER_TYPING = gql`
-  mutation userTyping($receiverId: String!) {
-     userTyping(receiverId: $receiverId)
+  mutation userTyping($chatId: String!) {
+     userTyping(chatId: $chatId)
   }
 `;
 
 export const NEW_MESSAGE_SUBSCRIBE = gql`
-    subscription($receiverId: String!, $authId: String!) {
-      newMessage(receiverId: $receiverId, authId: $authId) {
-        content
-        senderId
-        receiverId
-        id
-        timestamp
-        users {
-          email
-          firstName
-        }
-      }
+    ${MESSAGE_FIELDS}
+    subscription($chatId: String!) {
+      newMessage(chatId: $chatId) {
+         ...messageFields
+         }
     }
 `;
 
 export const USER_TYPING_SUBSCRIBE = gql`
-    subscription($receiverId: String!) {
-        userTyping(receiverId: $receiverId) 
+    subscription($chatId: String!) {
+        userTyping(chatId: $chatId) 
     }
-`
+`;

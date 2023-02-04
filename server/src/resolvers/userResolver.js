@@ -1,11 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User } = require("../models/User")
+const { User } = require("../models/User");
 const { withFilter, PubSub } = require("graphql-subscriptions");
 const { GraphQLError } = require("graphql");
 
-const IS_USER_ONLINE = "userOnline"
-const pubsub = new PubSub()
+const IS_USER_ONLINE = "userOnline";
+const pubsub = new PubSub();
 
 const resolvers = {
     Query: {
@@ -34,7 +34,7 @@ const resolvers = {
             }
         },
         userAuth: async (_, __, { context }) => {
-            const { user } = context
+            const { user } = context;
             if (!user) {
                 throw new GraphQLError("Authentication Failed, user not found");
             }
@@ -52,15 +52,15 @@ const resolvers = {
                 const users = await User.find({});
                 return users;
             } catch (e) {
-                throw new GraphQLError(`Database Error, ${e}`)
+                throw new GraphQLError(`Database Error, ${e}`);
             }
         },
-        getUserById: async (_, {id}) => {
+        getUserById: async (_, { id }) => {
             try {
-                const user = await User.findById(id)
-                return user
+                const user = await User.findById(id);
+                return user;
             } catch (e) {
-                throw new GraphQLError(`Database Error, ${e}`)
+                throw new GraphQLError(`Database Error, ${e}`);
             }
         }
     },
@@ -88,12 +88,12 @@ const resolvers = {
                     console.log(payload);
                     console.log(variables);
                     console.log(context);
-                    return variables.authUserId === 1
+                    return variables.authUserId === 1;
                 }
-            ),
+            )
         }
     }
-}
+};
 
 
-module.exports = resolvers
+module.exports = resolvers;
