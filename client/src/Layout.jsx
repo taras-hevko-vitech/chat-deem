@@ -8,14 +8,14 @@ import { Navigate, Route, Routes } from "react-router";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 import { useRecoilState } from "recoil";
-import { authState, selectedChatId } from "./state/atoms";
+import { authState, selectedChatId, selectedUserId } from "./state/atoms";
 import SelectChatBanner from "./components/SelectChatBanner/SelectChatBanner";
 import Login from "./components/Login/Login";
 import SignUpForm from "./components/SignUpForm/SignUpForm";
 
 function Layout() {
     const [auth] = useRecoilState(authState)
-    const [chatID] = useRecoilState(selectedChatId)
+    const [userId] = useRecoilState(selectedUserId)
     const {width} = useWindowDimensions()
 
     const isSmallMobile = width < 686;
@@ -57,7 +57,7 @@ function Layout() {
                         <div className="main">
                             <Teams />
                             <MessageList />
-                            {chatID ? (
+                            {userId ? (
                                 <>
                                     {!isTablet && <ProfileInformation />}
                                     <ChatComponent />

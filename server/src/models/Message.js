@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const messageSchema = new Schema({
     content: String,
     senderId: String,
-    receiverId: String,
+    chatId: String,
     timestamp: Number
 });
 

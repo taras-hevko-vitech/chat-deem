@@ -8,10 +8,10 @@ import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import {
     GET_MESSAGES,
     NEW_MESSAGE_SUBSCRIBE,
-    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE
+    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE,CREATE_NEW_CHAT
 } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
-import { authState, selectedChatId } from "../../state/atoms";
+import { authState, selectedChatId, selectedUserId } from "../../state/atoms";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import Typing from "../Typing/Typing";
 import { useToast } from "../Toast/useToast";
@@ -28,26 +28,29 @@ function ChatComponent() {
     const [userTyping, setUserTyping] = useState(null)
 
     const [auth] = useRecoilState(authState);
-    const [chatId] = useRecoilState(selectedChatId);
+    const [chatId, setChatId] = useRecoilState(selectedChatId);
+    const [userId] = useRecoilState(selectedUserId)
     const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
+
+    const [createChatMutation] = useMutation(CREATE_NEW_CHAT)
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
     const [userTypingMutation] = useMutation(USER_TYPING)
 
     useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
-        { variables: { receiverId: chatId, authId: auth.id },
+        { variables: { chatId: chatId },
             onSubscriptionData({ subscriptionData: { data}}) {
-                setUserTyping(null)
-                if (data?.newMessage?.receiverId === auth.id) {
+                if (data?.newMessage?.senderId !== auth.id) {
                     // todo CHANGE THIS DEU TO CHAT ROOMS
-                    toast.open("YOU get NEW MESSAGE", TOAST_TYPE.success, 3000)
+                    toast.open("You get new message", TOAST_TYPE.success, 3000)
                 }
+                setUserTyping(null)
                 setChatMessages([...chatMessages, data.newMessage])
             }
         });
     useSubscription(
         USER_TYPING_SUBSCRIBE,
-        { variables: { receiverId: auth.id },
+        { variables: { chatId: chatId },
             onSubscriptionData({ subscriptionData: { data } }) {
                 if (data.userTyping) {
                     setUserTyping(data.userTyping)
@@ -63,13 +66,18 @@ function ChatComponent() {
     useEffect(() => {
         const getMessages = async () => {
             const messages = await getMessagesQuery({
-                variables: { receiverId: chatId }
+                variables: { receiverId: userId }
             });
-            setChatMessages([...messages.data.messageByUser]);
+            if (messages.data?.messageByUser.length > 0) {
+                setChatMessages([...messages.data.messageByUser]);
+                setChatId(messages.data.messageByUser[0].chatId)
+            } else {
+                setChatMessages([])
+            }
         };
-        chatId && getMessages() && setUserTyping(null)
-    }, [chatId]);
-
+        userId && getMessages() && setUserTyping(null)
+    }, [userId]);
+    console.log("chatId", chatId);
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -77,24 +85,44 @@ function ChatComponent() {
     const onSend = async (e) => {
         e.preventDefault();
         if (message.trim().length > 0) {
-            await sendMessageMutation({
-                variables: {
-                    receiverId: chatId,
-                    content: message,
-                    timestamp: 321341324321431
-                }
-            });
+            await storeMessage()
+            setMessage("");
         }
-        setMessage("");
     };
+    console.log("userId", userId);
+    const storeMessage = async () => {
+        if (chatId) {
+            await sendMessage()
+        } else {
+            const response = await createChatMutation({
+                variables: {
+                    receiverId: userId,
+                }
+            })
+            setChatId(response.data.createNewChat.id)
+            await sendMessage(response.data.createNewChat.id)
+        }
+    }
+
+    const sendMessage = async (chat = chatId) => {
+        await sendMessageMutation({
+            variables: {
+                chatId: chat,
+                content: message,
+                timestamp: 321341324321431
+            }
+        });
+    }
 
     const handleMessageChange = async (e) => {
         setMessage(e.target.value)
-        await userTypingMutation({
-            variables: {
-                receiverId: chatId
-            }
-        })
+        if (chatId) {
+            await userTypingMutation({
+                variables: {
+                    chatId: chatId
+                }
+            })
+        }
     }
 
     const isTablet = width < 1100
@@ -112,7 +140,7 @@ function ChatComponent() {
                         date={mess.timestamp}
                     />
                 ))}
-                {userTyping === chatId && <Typing />}
+                {userTyping === userId && <Typing />}
                 <div ref={messagesEndRef} />
             </div>
             <form className="chat-footer" onSubmit={onSend}>

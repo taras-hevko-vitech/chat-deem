@@ -10,3 +10,8 @@ export const selectedChatId = atom({
     key: "selectedChat",
     default: null
 });
+export const selectedUserId = atom({
+    key: "selectedUserId",
+    default: null
+});
+
