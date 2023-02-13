@@ -5,14 +5,6 @@ const MESSAGE_FIELDS = gql`
         senderId
         chatId
         content
-        timestamp
-    }
-`;
-
-const CHAT_FIELDS = gql`
-    fragment chatFields on Chat {
-        id
-        users
     }
 `;
 
@@ -25,11 +17,11 @@ export const GET_MESSAGES = gql`
     }   
 `;
 
-export const CREATE_NEW_CHAT = gql`
-${CHAT_FIELDS}
-    mutation createNewChat($receiverId: String!) {
-      createNewChat(receiverId: $receiverId) {
-        ...chatFields
+export const SEND_FIRST_MESSAGE = gql`
+${MESSAGE_FIELDS}
+    mutation sendFirstMessage($receiverId: String! $content: String!) {
+      sendFirstMessage(receiverId: $receiverId content: $content) {
+        ...messageFields
     }
  }
 `;
@@ -39,12 +31,10 @@ export const SEND_MESSAGE = gql`
     mutation sendMessage(
       $chatId: String!
       $content: String!
-      $timestamp: Float!
     ) {
       sendMessage(
         chatId: $chatId
         content: $content
-        timestamp: $timestamp
       ) {
         ...messageFields
       }
@@ -56,6 +46,15 @@ export const USER_TYPING = gql`
      userTyping(chatId: $chatId)
   }
 `;
+
+export const NEW_CHAT_SUBSCRIBE = gql`
+    ${MESSAGE_FIELDS}
+    subscription($userId: String!) {
+      newMessageAndChat(userId: $userId) {
+         ...messageFields
+         }
+    }
+`
 
 export const NEW_MESSAGE_SUBSCRIBE = gql`
     ${MESSAGE_FIELDS}

@@ -32,11 +32,11 @@ function MessagePreviewItem({ previewData }) {
 
     const selectChat = (id) => {
         setChatId(null)
+        setUserId(id);
         const isMobile = width < 960;
         if (isMobile) {
             navigate("/chat");
         }
-        setUserId(id);
     };
 
     return (

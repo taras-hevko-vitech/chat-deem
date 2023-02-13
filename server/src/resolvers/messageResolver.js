@@ -1,26 +1,60 @@
 const { Message } = require("../models/Message");
 const { Chat } = require("../models/Chat");
 const { PubSub, withFilter } = require("graphql-subscriptions");
-const { GraphQLError } = require("graphql");
 
 const MESSAGE_ADDED = "newMessage";
 const USER_TYPING = "userTyping";
+const CHAT_ADDED = "newChat"
 const pubsub = new PubSub();
 
 const Query = {
     messageByUser: async (_, { receiverId }, { context }) => {
         const { user } = context;
         if (!user) throw new Error("You have to log in");
-        const createdChatBefore = await Chat.findOne({ users: {$all: [user.id, receiverId] } });
+        const createdChatBefore = await Chat.findOne({ users: { $all: [user.id, receiverId] } });
+
         if (createdChatBefore) {
             const messages = await Message.find({ chatId: createdChatBefore.id });
             return messages;
-        } else {
-            return []
         }
+        return [];
     }
 };
 const Mutation = {
+    sendFirstMessage: async (_, args, { context }) => {
+        const { receiverId, content } = args;
+        const { user } = context;
+
+        let chat = await Chat.findOne({
+            users: { $all: [user.id, receiverId] }
+        });
+
+        if (!chat) {
+            chat = new Chat({
+                users: [user.id, receiverId]
+            });
+
+            await chat.save();
+        }
+
+        const message = new Message({
+            senderId: user.id,
+            chatId: chat.id,
+            content
+        });
+
+        await message.save();
+
+        await pubsub.publish(CHAT_ADDED, {
+            newChat: chat,
+            newMessage: message
+        })
+        await pubsub.publish(MESSAGE_ADDED, {
+            newMessage: message
+        });
+
+        return message;
+    },
     sendMessage: async (_, args, { context }) => {
         const { user } = context;
         const { chatId, content, timestamp } = args;
@@ -37,16 +71,6 @@ const Mutation = {
             newMessage: newMessage
         });
         return newMessage;
-    },
-
-    createNewChat: async (_, { receiverId }, { context }) => {
-        const { user } = context;
-        const newChat = new Chat({
-            users: [user.id, receiverId]
-        });
-        await newChat.save();
-
-        return newChat;
     },
 
     userTyping: async (_, { chatId }, { context }) => {
@@ -69,6 +93,18 @@ const Mutation = {
     }
 };
 const Subscription = {
+    newMessageAndChat: {
+        subscribe: withFilter(
+            () => pubsub.asyncIterator(CHAT_ADDED),
+            (payload, variables = {}) => {
+                return payload.newChat.users.includes(variables.userId) &&
+                    payload.newChat.users.includes(payload.newMessage.senderId)
+            }
+        ),
+        resolve: (payload) => {
+            return payload.newMessage;
+        },
+    },
     newMessage: {
         subscribe: withFilter(
             () => pubsub.asyncIterator(MESSAGE_ADDED),
