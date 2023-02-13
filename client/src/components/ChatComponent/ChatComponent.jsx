@@ -8,7 +8,7 @@ import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import {
     GET_MESSAGES,
     NEW_MESSAGE_SUBSCRIBE,
-    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE,CREATE_NEW_CHAT
+    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE, SEND_FIRST_MESSAGE, NEW_CHAT_SUBSCRIBE
 } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId, selectedUserId } from "../../state/atoms";
@@ -30,9 +30,11 @@ function ChatComponent() {
     const [auth] = useRecoilState(authState);
     const [chatId, setChatId] = useRecoilState(selectedChatId);
     const [userId] = useRecoilState(selectedUserId)
-    const [getMessagesQuery] = useLazyQuery(GET_MESSAGES);
+    const [getMessagesQuery] = useLazyQuery(GET_MESSAGES, {
+        fetchPolicy: "no-cache"
+    });
 
-    const [createChatMutation] = useMutation(CREATE_NEW_CHAT)
+    const [sendFirstMessageMutation] = useMutation(SEND_FIRST_MESSAGE)
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
     const [userTypingMutation] = useMutation(USER_TYPING)
 
@@ -49,8 +51,17 @@ function ChatComponent() {
             }
         });
     useSubscription(
+        NEW_CHAT_SUBSCRIBE,
+        { variables: { userId },
+            onSubscriptionData({ subscriptionData: { data}}) {
+                setChatMessages([data.newMessageAndChat])
+                setChatId(data.newMessageAndChat.chatId)
+                getMessagesByUserId()
+            }
+        });
+    useSubscription(
         USER_TYPING_SUBSCRIBE,
-        { variables: { chatId: chatId },
+        { variables: { chatId },
             onSubscriptionData({ subscriptionData: { data } }) {
                 if (data.userTyping) {
                     setUserTyping(data.userTyping)
@@ -58,26 +69,25 @@ function ChatComponent() {
             }
         });
 
-
     useEffect(() => {
         scrollToBottom();
     }, [chatMessages, userTyping]);
 
     useEffect(() => {
-        const getMessages = async () => {
-            const messages = await getMessagesQuery({
-                variables: { receiverId: userId }
-            });
-            if (messages.data?.messageByUser.length > 0) {
-                setChatMessages([...messages.data.messageByUser]);
-                setChatId(messages.data.messageByUser[0].chatId)
-            } else {
-                setChatMessages([])
-            }
-        };
-        userId && getMessages() && setUserTyping(null)
+        setChatMessages([])
+        userId && getMessagesByUserId() && setUserTyping(null)
     }, [userId]);
-    console.log("chatId", chatId);
+
+    const getMessagesByUserId = async (receiverId = userId) => {
+        const messages = await getMessagesQuery({
+            variables: { receiverId }
+        });
+        if (messages.data?.messageByUser.length > 0) {
+            setChatMessages([...messages.data.messageByUser]);
+            setChatId(messages.data.messageByUser[0].chatId)
+        }
+    };
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -85,44 +95,33 @@ function ChatComponent() {
     const onSend = async (e) => {
         e.preventDefault();
         if (message.trim().length > 0) {
-            await storeMessage()
+            chatId ? await sendMessage() : await sendFirstMessage()
             setMessage("");
         }
     };
-    console.log("userId", userId);
-    const storeMessage = async () => {
-        if (chatId) {
-            await sendMessage()
-        } else {
-            const response = await createChatMutation({
-                variables: {
-                    receiverId: userId,
-                }
-            })
-            setChatId(response.data.createNewChat.id)
-            await sendMessage(response.data.createNewChat.id)
-        }
-    }
 
-    const sendMessage = async (chat = chatId) => {
+    const sendMessage = async () => {
         await sendMessageMutation({
             variables: {
-                chatId: chat,
+                chatId: chatId,
                 content: message,
-                timestamp: 321341324321431
             }
         });
+    }
+    const sendFirstMessage = async () => {
+        await sendFirstMessageMutation({
+            variables: {
+                content: message,
+                receiverId: userId
+            }
+        })
     }
 
     const handleMessageChange = async (e) => {
         setMessage(e.target.value)
-        if (chatId) {
-            await userTypingMutation({
-                variables: {
-                    chatId: chatId
-                }
+            chatId && await userTypingMutation({
+                variables: { chatId }
             })
-        }
     }
 
     const isTablet = width < 1100

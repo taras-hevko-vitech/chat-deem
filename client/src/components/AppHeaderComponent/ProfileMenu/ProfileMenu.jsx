@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import "./ProfileMenu.scss";
 import userIcon from "../../../assets/images/user-icon.svg";
 import { useRecoilState } from "recoil";
-import { authState } from "../../../state/atoms";
+import { authState, selectedChatId, selectedUserId } from "../../../state/atoms";
 
 function ProfileMenu() {
     const [showMenu, setShowMenu] = useState(false);
     const [auth, setAuth] = useRecoilState(authState);
+    const [userId, setUserId] = useRecoilState(selectedUserId)
+    const [chatId, setChatId] = useRecoilState(selectedChatId)
 
     const logout = () => {
         setAuth(null);
+        setChatId(null)
+        setUserId(null)
         localStorage.removeItem("token");
     };
 

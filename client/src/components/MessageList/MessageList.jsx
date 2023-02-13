@@ -8,9 +8,12 @@ import classNames from "classnames";
 import { useLazyQuery } from "@apollo/client";
 import { GET_USERS } from "../../graphql/user";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/atoms";
 
 function MessageList() {
     const {width} = useWindowDimensions()
+    const [auth] = useRecoilState(authState)
     const [searchValue, setSearchValue] = useState("");
     const [showChannelList, setShowChannelList] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
@@ -21,7 +24,7 @@ function MessageList() {
     const getAllUsers = async () => {
         const response = await allUsersQuery();
         if (response.data.getAllUsers) {
-            setAllUsers(response.data.getAllUsers);
+            setAllUsers(response.data.getAllUsers.filter(user => user.id !== auth.id));
         }
     };
 

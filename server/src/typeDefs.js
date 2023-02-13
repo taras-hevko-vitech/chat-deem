@@ -11,15 +11,16 @@ const typeDefs = gql`
     type Mutation {
         userSignUp(input: UserSignUpInput!): User
         userTyping(chatId: String!): Boolean!
-        sendMessage(chatId: String! content: String! timestamp: Float!): Message!
-        createNewChat(receiverId: String!): Chat!
+        sendMessage(chatId: String! content: String!): Message!
+        sendFirstMessage(receiverId: String! content: String!): Message!
         updateMessage(id: ID! content: String!): Message!
         deleteMessage(id: ID!): Boolean!
     }
     type Subscription {
         newMessage(chatId: String!): Message
+        newMessageAndChat(userId: String!): Message
         newUser: User
-        isUserOnline(authUserId: ID!, userId: ID!): IsUserOnlinePayload
+        isUserOnline(authUserId: ID! userId: ID!): IsUserOnlinePayload
         userTyping (chatId: String!): String
     }
     
@@ -30,7 +31,6 @@ const typeDefs = gql`
         email: String!
         phoneNo: String
         password: String
-        timestamp: Float!
     }
     
     type Message {
@@ -38,12 +38,6 @@ const typeDefs = gql`
         content: String!
         senderId: String!
         chatId: String!
-        timestamp: Float!
-    }
-    
-    type Chat {
-        id: ID!
-        users: [String]
     }
     
     type LoginPayload {

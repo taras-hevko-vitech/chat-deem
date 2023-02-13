@@ -14,12 +14,9 @@ const userSchema = new Schema({
             minLength: 6,
             unique: true
         },
-        password: String
-    },
-    {
-        timestamps: true
-    }
-);
+        password: String,
+        timestamp: { type: Date, default: Date.now },
+    });
 
 const User = mongoose.model("users", userSchema);
 module.exports = { User };

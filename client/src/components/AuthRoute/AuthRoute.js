@@ -5,7 +5,6 @@ import { USER_AUTH } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
 import SimpleLoader from "../SimpleLoader/SimpleLoader";
-import { TOAST_TYPE } from "../../helper/Constans";
 import { useToast } from "../Toast/useToast";
 
 function AuthRoute({ children, authenticated, guest }) {
@@ -16,11 +15,16 @@ function AuthRoute({ children, authenticated, guest }) {
 
     const userAuth = async () => {
         setShownLoader(true)
-        const response = await userAuthQuery();
-        if (response.data.userAuth) {
-            setAuth(response.data.userAuth);
+        try {
+            const response = await userAuthQuery();
+            if (response.data.userAuth) {
+                setAuth(response.data.userAuth);
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setShownLoader(false)
         }
-        setShownLoader(false)
     };
 
     useEffect(() => {
