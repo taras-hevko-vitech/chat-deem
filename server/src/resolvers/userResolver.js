@@ -4,8 +4,15 @@ const { User } = require("../models/User");
 const { withFilter, PubSub } = require("graphql-subscriptions");
 const { GraphQLError } = require("graphql");
 
-const IS_USER_ONLINE = "userOnline";
+const USER_ONLINE_STATUS = "userOnline";
 const pubsub = new PubSub();
+
+const updateAllUsers = async () => {
+    const users = await User.find({});
+    await pubsub.publish(USER_ONLINE_STATUS, { updateAllUsers: users });
+
+    return users
+}
 
 const resolvers = {
     Query: {
@@ -47,14 +54,6 @@ const resolvers = {
                 throw new GraphQLError(`Authentication Error, ${e}`);
             }
         },
-        getAllUsers: async () => {
-            try {
-                const users = await User.find({});
-                return users;
-            } catch (e) {
-                throw new GraphQLError(`Database Error, ${e}`);
-            }
-        },
         getUserById: async (_, { id }) => {
             try {
                 const user = await User.findById(id);
@@ -73,26 +72,40 @@ const resolvers = {
                     ...input,
                     password: hashedPassword
                 });
+                await updateAllUsers()
                 return await newUser.save();
             } catch (e) {
                 throw new GraphQLError(e);
             }
-        }
+        },
+        logOut: async (_, __, { context }) => {
+            const { user } = context;
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: user.id },
+                { $set: { isOnline: false } },
+                { new: true }
+            );
+
+            await updateAllUsers()
+            return updatedUser;
+        },
+        setIsUserOnline: async (_, {userId}) => {
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: userId },
+                { $set: { isOnline: true, lastSeen: new Date() } },
+                { new: true }
+            );
+            await updateAllUsers()
+
+            return updatedUser
+        },
     },
 
     Subscription: {
-        isUserOnline: {
-            subscribe: withFilter(
-                () => pubsub.asyncIterator(IS_USER_ONLINE),
-                (payload, variables, context) => {
-                    console.log(payload);
-                    console.log(variables);
-                    console.log(context);
-                    return variables.authUserId === 1;
-                }
-            )
-        }
-    }
+        updateAllUsers: {
+            subscribe: () => pubsub.asyncIterator(USER_ONLINE_STATUS)
+        },
+    },
 };
 
 

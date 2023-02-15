@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import Teams from "../Teams/Teams";
 import classNames from "classnames";
-import { useLazyQuery } from "@apollo/client";
-import { GET_USERS } from "../../graphql/user";
+import { useSubscription } from "@apollo/client";
+import { UPDATE_USERS_SUBSCRIPTION } from "../../graphql/user";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
@@ -19,18 +19,17 @@ function MessageList() {
     const [showSearchInput, setShowSearchInput] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
 
-    const [allUsersQuery] = useLazyQuery(GET_USERS);
-
-    const getAllUsers = async () => {
-        const response = await allUsersQuery();
-        if (response.data.getAllUsers) {
-            setAllUsers(response.data.getAllUsers.filter(user => user.id !== auth.id));
+    useSubscription(UPDATE_USERS_SUBSCRIPTION, {
+        onSubscriptionData({ subscriptionData: { data}}) {
+            if (data.updateAllUsers) {
+                setAllUsers(removeAuthUserFromList(data.updateAllUsers))
+            }
         }
-    };
+    });
 
-    useEffect(() => {
-        getAllUsers();
-    }, []);
+    const removeAuthUserFromList = (users) => {
+        return users.filter(user => user.id !== auth.id)
+    }
 
     useEffect(() => {
         handleSearchChange();
@@ -42,9 +41,6 @@ function MessageList() {
     });
 
     const handleSearchChange = () => {
-        if (searchValue.length === 0) {
-            getAllUsers();
-        }
         const filteredUsers = allUsers.filter(user => {
             const name = user.firstName.toLowerCase();
             const lastName = user.lastName.toLowerCase();
@@ -52,16 +48,28 @@ function MessageList() {
                 return user;
             }
         });
-        setAllUsers(filteredUsers);
     };
     const handleKeyDown = event => {
         if (event.key === "Escape") {
             setShowSearchInput(false);
             setSearchValue("");
-            getAllUsers();
         }
     };
+
+    function sortUsersByOnlineStatus(users) {
+        return users.sort((userA, userB) => {
+            if (userA.isOnline && !userB.isOnline) {
+                return -1;
+            } else if (!userA.isOnline && userB.isOnline) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    }
     const isMobile = width < 960;
+
+    const sortedUsersByStatus = sortUsersByOnlineStatus(allUsers)
 
     return (
         <div className="message-list">
@@ -96,7 +104,7 @@ function MessageList() {
                 </div>
             </div>
             <div className="chat-list">
-                {allUsers.map((chat, i) => (
+                {sortedUsersByStatus.map((chat, i) => (
                     <MessagePreviewItem key={i} previewData={chat} />
                 ))}
             </div>

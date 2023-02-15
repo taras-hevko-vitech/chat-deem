@@ -15,19 +15,19 @@ function MessagePreviewItem({ previewData }) {
     const [__, setUserId] = useRecoilState(selectedUserId);
 
     const {
-        firstName = "Unknown",
+        firstName,
         id,
-        lastName = "Unknown",
+        lastName,
         photoURL = "https://picsum.photos/seed/picsum/200/300",
-        onlineStatus,
+        isOnline,
         lastMessageText = "It is to early to provide some kind of estimation here. We need user stories.",
         lastMessageData = "12:05pm"
     } = previewData;
 
     const statusClassname = classNames({
         "online-status": true,
-        "active-status": onlineStatus === "ACTIVE",
-        "dont-disturb": onlineStatus === "DONT_DISTURB"
+        "active-status": isOnline,
+        "dont-disturb": !isOnline
     });
 
     const selectChat = (id) => {

@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router";
-import { useLazyQuery } from "@apollo/client";
-import { USER_AUTH } from "../../graphql/user";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { UPDATE_ONLINE_STATUS, USER_AUTH } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
 import SimpleLoader from "../SimpleLoader/SimpleLoader";
-import { useToast } from "../Toast/useToast";
 
 function AuthRoute({ children, authenticated, guest }) {
-    const toast = useToast()
     const [showLoader, setShownLoader] = useState(false)
-    const [userAuthQuery, {error}] = useLazyQuery(USER_AUTH);
+    const [userAuthQuery] = useLazyQuery(USER_AUTH);
     const [auth, setAuth] = useRecoilState(authState);
+    const [setOnlineMutation] = useMutation(UPDATE_ONLINE_STATUS)
 
     const userAuth = async () => {
         setShownLoader(true)
@@ -27,12 +26,24 @@ function AuthRoute({ children, authenticated, guest }) {
         }
     };
 
+    const setOnlineStatus = async () => {
+        auth && await setOnlineMutation({
+            variables: {
+                userId: auth.id
+            }
+        })
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
             userAuth();
         }
     }, []);
+
+    useEffect(() => {
+        setOnlineStatus()
+    }, [auth])
 
     if (showLoader) {
         return <SimpleLoader />
