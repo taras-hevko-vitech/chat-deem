@@ -15,6 +15,8 @@ const userSchema = new Schema({
             unique: true
         },
         password: String,
+        isOnline: Boolean,
+        lastSeen: String,
         timestamp: { type: Date, default: Date.now },
     });
 

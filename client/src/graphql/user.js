@@ -7,6 +7,10 @@ const USER_FIELDS = gql`
         firstName
         lastName
         phoneNo
+        createdAt
+        updatedAt
+        isOnline
+        lastSeen
     }
 `;
 
@@ -31,21 +35,30 @@ export const LOGIN = gql`
     }
 `;
 
+export const LOGOUT = gql`
+    ${USER_FIELDS}
+    mutation logOut {
+      logOut {
+        ...UserFields
+      }
+    }
+`
+
+export const UPDATE_ONLINE_STATUS = gql`
+    ${USER_FIELDS}
+    mutation setIsUserOnline($userId: String!) {
+      setIsUserOnline(userId: $userId) {
+        ...UserFields
+      }
+    }
+`
+
 export const USER_AUTH = gql`
     ${USER_FIELDS}
     query userAuth {
         userAuth {
             ...UserFields
         }
-    }
-`;
-
-export const GET_USERS = gql`
-    ${USER_FIELDS}
-    query {
-      getAllUsers {
-        ...UserFields
-      }
     }
 `;
 
@@ -59,11 +72,11 @@ export const GET_USER_BY_ID = gql`
 `;
 
 
-export const USER_ONLINE_SUBSCRIPTION = gql`
-    subscription Subscription($authUserId: ID!, $userId: ID!) {
-      isUserOnline(authUserId: $authUserId, userId: $userId) {
-        isOnline
-        userId
+export const UPDATE_USERS_SUBSCRIPTION = gql`
+    ${USER_FIELDS}
+    subscription {
+      updateAllUsers {
+        ...UserFields
       }
     }
 `
