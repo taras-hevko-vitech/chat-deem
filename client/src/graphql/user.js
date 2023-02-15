@@ -35,10 +35,10 @@ export const LOGIN = gql`
     }
 `;
 
-export const LOGOUT = gql`
+export const REMOVE_ONLINE_STATUS = gql`
     ${USER_FIELDS}
-    mutation logOut {
-      logOut {
+    mutation removeOnlineStatus {
+      removeOnlineStatus {
         ...UserFields
       }
     }

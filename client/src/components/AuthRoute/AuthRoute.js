@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { UPDATE_ONLINE_STATUS, USER_AUTH } from "../../graphql/user";
+import { REMOVE_ONLINE_STATUS, UPDATE_ONLINE_STATUS, USER_AUTH } from "../../graphql/user";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/atoms";
 import SimpleLoader from "../SimpleLoader/SimpleLoader";
@@ -11,6 +11,8 @@ function AuthRoute({ children, authenticated, guest }) {
     const [userAuthQuery] = useLazyQuery(USER_AUTH);
     const [auth, setAuth] = useRecoilState(authState);
     const [setOnlineMutation] = useMutation(UPDATE_ONLINE_STATUS)
+    const [removeOnlineStatusMutation] = useMutation(REMOVE_ONLINE_STATUS)
+
 
     const userAuth = async () => {
         setShownLoader(true)
@@ -33,6 +35,9 @@ function AuthRoute({ children, authenticated, guest }) {
             }
         })
     }
+    const removeOnlineStatus = async () => {
+        await removeOnlineStatusMutation()
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -43,6 +48,11 @@ function AuthRoute({ children, authenticated, guest }) {
 
     useEffect(() => {
         setOnlineStatus()
+        window.addEventListener("beforeunload", removeOnlineStatus)
+        return () => {
+            window.addEventListener("beforeunload", removeOnlineStatus)
+
+        }
     }, [auth])
 
     if (showLoader) {

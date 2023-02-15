@@ -10,7 +10,7 @@ const typeDefs = gql`
     type Mutation {
         userSignUp(input: UserSignUpInput!): User
         setIsUserOnline(userId: String!): User
-        logOut: User
+        removeOnlineStatus: User
         userTyping(chatId: String!): Boolean!
         sendMessage(chatId: String! content: String!): Message!
         sendFirstMessage(receiverId: String! content: String!): Message!

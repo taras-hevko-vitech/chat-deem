@@ -4,17 +4,17 @@ import userIcon from "../../../assets/images/user-icon.svg";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId, selectedUserId } from "../../../state/atoms";
 import { useMutation } from "@apollo/client";
-import { LOGOUT } from "../../../graphql/user";
+import { REMOVE_ONLINE_STATUS } from "../../../graphql/user";
 
 function ProfileMenu() {
     const [showMenu, setShowMenu] = useState(false);
     const [auth, setAuth] = useRecoilState(authState);
     const [userId, setUserId] = useRecoilState(selectedUserId)
     const [chatId, setChatId] = useRecoilState(selectedChatId)
-    const [logOutMutation] = useMutation(LOGOUT)
+    const [removeOnlineStatusMutation] = useMutation(REMOVE_ONLINE_STATUS)
 
     const logout = async () => {
-        await logOutMutation()
+        await removeOnlineStatusMutation()
         setAuth(null);
         setChatId(null)
         setUserId(null)
