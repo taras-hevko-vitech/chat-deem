@@ -78,7 +78,7 @@ const resolvers = {
                 throw new GraphQLError(e);
             }
         },
-        logOut: async (_, __, { context }) => {
+        removeOnlineStatus: async (_, __, { context }) => {
             const { user } = context;
             const updatedUser = await User.findOneAndUpdate(
                 { _id: user.id },
