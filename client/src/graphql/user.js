@@ -46,8 +46,8 @@ export const REMOVE_ONLINE_STATUS = gql`
 
 export const UPDATE_ONLINE_STATUS = gql`
     ${USER_FIELDS}
-    mutation setIsUserOnline($userId: String!) {
-      setIsUserOnline(userId: $userId) {
+    mutation setIsUserOnline {
+      setIsUserOnline {
         ...UserFields
       }
     }

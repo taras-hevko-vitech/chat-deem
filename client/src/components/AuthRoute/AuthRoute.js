@@ -29,14 +29,10 @@ function AuthRoute({ children, authenticated, guest }) {
     };
 
     const setOnlineStatus = async () => {
-        auth && await setOnlineMutation({
-            variables: {
-                userId: auth.id
-            }
-        })
+        auth && await setOnlineMutation()
     }
     const removeOnlineStatus = async () => {
-        await removeOnlineStatusMutation()
+        auth && await removeOnlineStatusMutation()
     }
 
     useEffect(() => {

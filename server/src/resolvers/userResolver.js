@@ -89,9 +89,10 @@ const resolvers = {
             await updateAllUsers()
             return updatedUser;
         },
-        setIsUserOnline: async (_, {userId}) => {
+        setIsUserOnline: async (_, __, { context }) => {
+            const {user} = context;
             const updatedUser = await User.findOneAndUpdate(
-                { _id: userId },
+                { _id: user.id },
                 { $set: { isOnline: true, lastSeen: new Date() } },
                 { new: true }
             );
