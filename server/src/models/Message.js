@@ -7,6 +7,7 @@ const messageSchema = new Schema({
     senderId: String,
     chatId: String,
     timestamp: { type: Date, default: Date.now },
+    isRead: Boolean
 });
 
 const Message = mongoose.model("message", messageSchema);

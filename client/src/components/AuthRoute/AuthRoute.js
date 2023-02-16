@@ -29,7 +29,7 @@ function AuthRoute({ children, authenticated, guest }) {
     };
 
     const setOnlineStatus = async () => {
-        auth && await setOnlineMutation()
+        await setOnlineMutation()
     }
     const removeOnlineStatus = async () => {
         await removeOnlineStatusMutation()
@@ -43,7 +43,7 @@ function AuthRoute({ children, authenticated, guest }) {
     }, []);
 
     useEffect(() => {
-        setOnlineStatus()
+        auth && setOnlineStatus()
         window.addEventListener("beforeunload", removeOnlineStatus)
         return () => {
             window.addEventListener("beforeunload", removeOnlineStatus)
