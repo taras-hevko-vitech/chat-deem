@@ -8,17 +8,14 @@ import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import {
     GET_MESSAGES,
     NEW_MESSAGE_SUBSCRIBE,
-    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE, SEND_FIRST_MESSAGE, NEW_CHAT_SUBSCRIBE
+    SEND_MESSAGE, USER_TYPING, USER_TYPING_SUBSCRIBE, SEND_FIRST_MESSAGE, NEW_CHAT_SUBSCRIBE, UPDATE_MESSAGE_IS_READ
 } from "../../graphql/messsages";
 import { useRecoilState } from "recoil";
 import { authState, selectedChatId, selectedUserId } from "../../state/atoms";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import Typing from "../Typing/Typing";
-import { useToast } from "../Toast/useToast";
-import { TOAST_TYPE } from "../../helper/Constans";
 
 function ChatComponent() {
-    const toast = useToast()
     const messagesEndRef = useRef(null);
 
     const {width} = useWindowDimensions()
@@ -36,16 +33,13 @@ function ChatComponent() {
 
     const [sendFirstMessageMutation] = useMutation(SEND_FIRST_MESSAGE)
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
+    const [readMessageMutation] = useMutation(UPDATE_MESSAGE_IS_READ)
     const [userTypingMutation] = useMutation(USER_TYPING)
 
     useSubscription(
         NEW_MESSAGE_SUBSCRIBE,
         { variables: { chatId: chatId },
             onSubscriptionData({ subscriptionData: { data}}) {
-                if (data?.newMessage?.senderId !== auth.id) {
-                    // todo CHANGE THIS DEU TO CHAT ROOMS
-                    toast.open("You get new message", TOAST_TYPE.success, 3000)
-                }
                 setUserTyping(null)
                 setChatMessages([...chatMessages, data.newMessage])
             }
@@ -71,6 +65,7 @@ function ChatComponent() {
 
     useEffect(() => {
         scrollToBottom();
+        chatId && readMessages()
     }, [chatMessages, userTyping]);
 
     useEffect(() => {
@@ -114,6 +109,12 @@ function ChatComponent() {
                 content: message,
                 receiverId: userId
             }
+        })
+    }
+
+    const readMessages = async () => {
+        await readMessageMutation({
+            variables: { chatId }
         })
     }
 

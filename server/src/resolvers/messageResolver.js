@@ -1,8 +1,11 @@
 const { Message } = require("../models/Message");
 const { Chat } = require("../models/Chat");
 const { PubSub, withFilter } = require("graphql-subscriptions");
+const { User } = require("../models/User");
 
 const MESSAGE_ADDED = "newMessage";
+const MESSAGE_NOTIFICATION = "messageNotification"
+const MESSAGE_READ = "messageRead"
 const USER_TYPING = "userTyping";
 const CHAT_ADDED = "newChat"
 const pubsub = new PubSub();
@@ -18,7 +21,34 @@ const Query = {
             return messages;
         }
         return [];
-    }
+    },
+    getUnreadMessages: async (_, args, {context}) => {
+        const {user} = context;
+
+        const userChats = await Chat.find({ users: { $in: [user.id] } });
+        const unreadMessages = [];
+            await Promise.all(userChats.map(async (chat) => {
+            const message = await Message.find({
+                chatId: chat.id,
+                senderId: {$ne: user.id},
+                isRead: false
+            })
+            if (message) {
+                unreadMessages.push(message)
+            }
+        }))
+        const unreadMessagesWithUserInfo = await Promise.all(unreadMessages[0].map(async (unreadMessage) => {
+            const userInfo = await User.findById(unreadMessage.senderId)
+            return {
+                message: unreadMessage,
+                user: userInfo
+            }
+        }))
+
+        if (unreadMessagesWithUserInfo.length > 0) {
+            return unreadMessagesWithUserInfo
+        }
+    },
 };
 const Mutation = {
     sendFirstMessage: async (_, args, { context }) => {
@@ -40,7 +70,8 @@ const Mutation = {
         const message = new Message({
             senderId: user.id,
             chatId: chat.id,
-            content
+            content,
+            isRead: false
         });
 
         await message.save();
@@ -53,23 +84,35 @@ const Mutation = {
             newMessage: message
         });
 
+        await pubsub.publish(MESSAGE_NOTIFICATION, {
+            messageReceived: message,
+            chat: chat,
+            user: user
+        })
+
         return message;
     },
     sendMessage: async (_, args, { context }) => {
         const { user } = context;
-        const { chatId, content, timestamp } = args;
+        const { chatId, content } = args;
 
+        const currentChat = await Chat.findOne({ _id: chatId})
         const newMessage = new Message({
             senderId: user.id,
             chatId: chatId,
             content,
-            timestamp
+            isRead: false
         });
         await newMessage.save();
-
+        await pubsub.publish(MESSAGE_NOTIFICATION, {
+            messageReceived: newMessage,
+            chat: currentChat,
+            user: user
+        })
         await pubsub.publish(MESSAGE_ADDED, {
             newMessage: newMessage
         });
+
         return newMessage;
     },
 
@@ -77,6 +120,30 @@ const Mutation = {
         const { user } = context;
         await pubsub.publish(USER_TYPING, { userTyping: user.id, chatId });
         return true;
+    },
+    markMessagesAsRead: async (_, { chatId }, { context }) => {
+        const {user} = context
+        try {
+            const chat = await Chat.findById(chatId);
+            if (!chat || !chat.users.includes(user.id)) {
+                throw new Error('Chat not found');
+            }
+
+            const messages = await Message.updateMany(
+                {
+                    chatId,
+                    senderId: { $ne: user.id },
+                    isRead: false,
+                },
+                {
+                    isRead: true,
+                }
+            );
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     },
     updateMessage: async (_, { id, content }) => {
         const userText = await Message.findOneAndUpdate(
@@ -114,6 +181,20 @@ const Subscription = {
         )
     },
 
+    messageReceived: {
+        subscribe: withFilter(
+            () => pubsub.asyncIterator(MESSAGE_NOTIFICATION),
+            (payload, variables = {} ) => {
+                return payload.chat.users.includes(variables.userId) && payload.messageReceived.senderId !== variables.userId
+            }
+        ),
+        resolve: (payload) => {
+            return {
+                message: payload.messageReceived,
+                user: payload.user
+            }
+        }
+    },
     userTyping: {
         subscribe: withFilter(
             () => pubsub.asyncIterator(USER_TYPING),

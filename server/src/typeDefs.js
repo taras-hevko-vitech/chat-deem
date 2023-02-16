@@ -6,6 +6,7 @@ const typeDefs = gql`
         userAuth: User
         getUserById(id: String!): User
         messageByUser(receiverId: String!): [Message]
+        getUnreadMessages: [MessageWithUserPayload]
     }
     type Mutation {
         userSignUp(input: UserSignUpInput!): User
@@ -14,12 +15,14 @@ const typeDefs = gql`
         userTyping(chatId: String!): Boolean!
         sendMessage(chatId: String! content: String!): Message!
         sendFirstMessage(receiverId: String! content: String!): Message!
+        markMessagesAsRead(chatId: String!): Boolean
         updateMessage(id: ID! content: String!): Message!
         deleteMessage(id: ID!): Boolean!
     }
     type Subscription {
         newMessage(chatId: String!): Message
         newMessageAndChat(userId: String!): Message
+        messageReceived(userId: String!): MessageWithUserPayload
         newUser: User
         updateAllUsers: [User]
         userTyping (chatId: String!): String
@@ -38,11 +41,17 @@ const typeDefs = gql`
         lastSeen: String
     }
     
+    type MessageWithUserPayload {
+        user: User
+        message: Message
+    }
+    
     type Message {
         id: ID!
         content: String!
         senderId: String!
         chatId: String!
+        isRead: Boolean
     }
     
     type LoginPayload {
