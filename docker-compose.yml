@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    ports:
+      - "1000:1000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - MONGO_DB_URL=mongodb+srv://graphql:express@graphql-express.wvjpkdp.mongodb.net/?retryWrites=true&w=majority
+    depends_on:
+      - mongodb
+
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"

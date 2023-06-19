@@ -21,7 +21,7 @@ const httpServer = http.createServer(app);
 
 const PORT = process.env.PORT || 4003;
 
-mongoose.connect(`mongodb+srv://mostwanter:${process.env.DB_PASSWORD}@cluster0.tt5lljq.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 
 const wsServer = new WebSocketServer({
     server: httpServer,
