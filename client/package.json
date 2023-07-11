@@ -46,6 +46,7 @@
         ]
     },
     "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "axios": "^0.27.2",
         "classnames": "^2.3.1",
         "eslint": "^8.23.0",
