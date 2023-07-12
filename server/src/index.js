@@ -19,7 +19,7 @@ app.use(cors());
 
 const httpServer = http.createServer(app);
 
-const PORT = process.env.PORT || 4003;
+const PORT = process.env.PORT || 1000;
 
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 
