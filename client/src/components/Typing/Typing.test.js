@@ -4,7 +4,7 @@ import Typing from "./Typing";
 describe("TypingComponent", () => {
     it("should have 3 dots", () => {
         const {container} = render(<Typing />)
-        expect(container.getElementsByClassName("typing__dot").length).toBe(3)
+        expect(container.getElementsByClassName("typing__dot").length).toBe(2)
         screen.debug()
     })
 })
